@@ -16,7 +16,7 @@
 
 
 #define uexCV_default_margin 2
-#define uexCV_inner_padding UIEdgeInsetsMake(5,20,5,15)
+#define uexCV_inner_padding UIEdgeInsetsMake(5,10,5,8)
 #define uexCV_inner_max_width_multipier 0.5
 #define uexCV_default_label_color [UIColor uexCV_colorFromHtmlString:@"#ff4800"]
 #define uexCV_default_label_size 10
@@ -30,11 +30,13 @@ typedef NS_ENUM(NSInteger, uexCV_TableViewCellStatus) {
     cUexCV_TableViewCellYou
 };
 
-
+@class uexCV_TableView;
 @interface uexCV_TableViewCell : UITableViewCell
+@property (nonatomic,weak)uexCV_TableView *tableView;
+@property (nonatomic,strong)NSIndexPath * inCellIndex;
 @property (nonatomic,assign)uexCV_TableViewCellStatus status;
 @property (nonatomic,strong)UIImageView *photo;
-@property (nonatomic,strong)UIImageView *messageView;
+@property (nonatomic,strong)UIView *messageView;
 @property (nonatomic,strong)UILabel * timeLabel;
 @property (nonatomic,strong)UILabel * nameLabel;
 @property (nonatomic,strong)UIView *containerView;

@@ -7,7 +7,7 @@
 //
 
 #import "uexCV_TableViewCell.h"
-
+#import "uexCV_Bubble.h"
 
 
 
@@ -69,7 +69,7 @@
     [formatter setDateStyle:NSDateFormatterMediumStyle];
     [formatter setTimeStyle:NSDateFormatterShortStyle];
     [formatter setDateFormat:@"MM-dd   HH:mm:ss"];
-    NSDate *date = [NSDate dateWithTimeIntervalSince1970:[data[@"timestamp"] doubleValue]];
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:[data[@"timestamp"] doubleValue]/1000];
     NSString *time = [formatter stringFromDate:date];
     self.timeLabel=[[UILabel alloc]init];
     [_timeLabel setText:time];
@@ -86,7 +86,6 @@
     //photo
     self.photo=[[UIImageView alloc]initWithImage:info.photo];
     [_photo setContentMode:UIViewContentModeScaleToFill];
-    _photo.backgroundColor=[UIColor redColor];
     _photo.layer.masksToBounds=YES;
     _photo.layer.cornerRadius=uexCV_photo_cornor_radius;
     [uexCV_cell_container addSubview:_photo];
@@ -120,16 +119,13 @@
     }];
     
     //message
-    self.messageView=[[UIImageView alloc]init];
+    //self.messageView=[[UIImageView alloc]init];
+    self.messageView=[[uexCV_Bubble alloc]init];
+    self.messageView.backgroundColor=[UIColor clearColor];
     self.messageView.userInteractionEnabled =YES;
-    UIImage *bgimage = data[@"bgImage"];
-    bgimage = [bgimage stretchableImageWithLeftCapWidth:bgimage.size.width * 0.3 topCapHeight:bgimage.size.height * 0.8];
-    [_messageView setImage:bgimage];
+
     _messageView.layer.masksToBounds=YES;
-    _messageView.layer.cornerRadius=uexCV_photo_cornor_radius;
-    _messageView.layer.shadowColor=[UIColor blackColor].CGColor;
-    _messageView.layer.shadowOpacity=0.5;
-    _messageView.layer.shadowRadius=uexCV_message_shadow_radius;
+
     if(!uexCV_from_you){
         _messageView.transform=CGAffineTransformMakeScale(-1, 1);
         _messageView.layer.shadowOffset=CGSizeMake(-1, 1);
@@ -138,7 +134,7 @@
     }
     [uexCV_cell_container addSubview:_messageView];
     [_messageView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(uexCV_cell_container.mas_top).with.offset(uexCV_default_margin);
+        make.top.equalTo(uexCV_cell_container.mas_top).with.offset(4*uexCV_default_margin);
         make.bottom.lessThanOrEqualTo(ws.timeLabel.mas_top).with.offset(-uexCV_default_margin);
         
         if(!uexCV_from_you){

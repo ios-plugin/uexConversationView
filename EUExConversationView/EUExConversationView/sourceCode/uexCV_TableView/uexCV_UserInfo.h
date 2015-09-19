@@ -9,14 +9,6 @@
 #import <Foundation/Foundation.h>
 
 
-@interface UIColor(uexConversationView)
-
-+(instancetype)uexCV_colorFromHtmlString:(NSString *)colorString;
-
-
-@end
-
-
 
 
 

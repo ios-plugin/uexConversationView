@@ -67,7 +67,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
     self.tableView.allowsSelection=NO;
     //self.tableView.estimatedRowHeight = 40;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.header=[MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        /*self.tableView.header=[MJRefreshNormalHeader headerWithRefreshingBlock:^{
         self.isRefreshing=YES;
         if(self.loadHistoryBlock){
             self.loadHistoryBlock();
@@ -77,7 +77,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
 
     }];
     
-    
+    */
     
     [self.view addSubview:self.tableView];
 
@@ -182,8 +182,6 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
     NSInteger type=[data[@"type"] integerValue];
     NSMutableDictionary *msgData=[NSMutableDictionary dictionary];
     
-    
-    [msgData setValue:[UIImage imageWithContentsOfFile:[[_euexObj pluginBundle] pathForResource:@"qipao" ofType:@"png"]] forKey:@"bgImage"];
     NSInteger from =[data[@"from"] integerValue];
     [msgData setValue:@(from) forKey:@"from"];
     [msgData setValue:data[@"timestamp"] forKey:@"timestamp"];
@@ -198,7 +196,6 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
         NSString * path=[_euexObj absPath:data[@"data"]];
         NSURL *url=[NSURL URLWithString:path];
         NSError *error =nil;
-        [msgData setObject:[UIImage imageWithContentsOfFile:[_euexObj.pluginBundle pathForResource:@"audio" ofType:@"png"]] forKey:@"hornImage"];
         _player=[[AVAudioPlayer alloc]initWithContentsOfURL:url error:&error];
         if(!error){
             [_player prepareToPlay];
@@ -232,7 +229,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
         cell=[[uexCV_VoiceCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:uexCV_voice_cell_identifier];
         
     }
-    
+    cell.tableView=self.tableView;
     [cell modifiedCellWithMessageData:msgData userInfo:(from==1)?_meInfo:_youInfo];
     [cell setNeedsUpdateConstraints];
     [cell updateConstraintsIfNeeded];
@@ -263,8 +260,9 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-  
-    return (uexCV_TableViewCell*)self.cells[indexPath.row];
+    uexCV_TableViewCell* cell=(uexCV_TableViewCell*)self.cells[indexPath.row];
+    cell.inCellIndex=indexPath;
+    return cell;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
