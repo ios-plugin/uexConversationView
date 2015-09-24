@@ -8,7 +8,7 @@
 
 #import "uexCV_ViewController.h"
 #import "uexCV_TableView.h"
-#import "MJRefresh.h"
+
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
 #import "EUExConversationView.h"
@@ -67,7 +67,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
     self.tableView.allowsSelection=NO;
     //self.tableView.estimatedRowHeight = 40;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-        /*self.tableView.header=[MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        self.tableView.header=[MJRefreshNormalHeader headerWithRefreshingBlock:^{
         self.isRefreshing=YES;
         if(self.loadHistoryBlock){
             self.loadHistoryBlock();
@@ -77,7 +77,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
 
     }];
     
-    */
+    
     
     [self.view addSubview:self.tableView];
 

@@ -60,8 +60,8 @@
                                                                    extras:nil
                                                                   euexObj:self];
     self.vc=vc;
-    [EUtility brwView:meBrwView addSubview:vc.view];
-    
+    //[EUtility brwView:meBrwView addSubview:vc.view];
+    [EUtility brwView:meBrwView addSubviewToScrollView:vc.view];
     [self callbackJsonWithName:@"cbOpen" Object:nil];
     
 }

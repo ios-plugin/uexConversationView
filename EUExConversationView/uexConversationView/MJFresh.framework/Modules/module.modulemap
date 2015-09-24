@@ -1,0 +1,6 @@
+framework module MJFresh {
+  umbrella header "MJFresh.h"
+
+  export *
+  module * { export * }
+}
