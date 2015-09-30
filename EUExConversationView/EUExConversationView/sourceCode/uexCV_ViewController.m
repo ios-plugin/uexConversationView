@@ -21,7 +21,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
 
 @interface uexCV_ViewController ()<UITableViewDataSource,UITableViewDelegate,AVAudioPlayerDelegate>
 
-@property(nonatomic,strong) uexCV_TableView * tableView;
+
 @property(nonatomic,strong) NSMutableArray * cells;
 @property(nonatomic,strong) UIImage * bgImage;
 @property(nonatomic,assign) BOOL isRefreshing;

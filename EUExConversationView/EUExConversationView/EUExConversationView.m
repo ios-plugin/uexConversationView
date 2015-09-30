@@ -94,6 +94,11 @@
 }
 
 
+-(void)reload:(NSMutableArray *)inArguments{
+    NSLog(@"reload");
+    [self.vc.tableView reloadData];
+}
+
 #pragma mark - Private Methods
 
 -(uexCV_UserInfo *)defineUserInfo:(NSString *)user inDataDict:(NSDictionary *)dict{

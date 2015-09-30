@@ -5,6 +5,7 @@
         <method name="open"></method>
         <method name="close"></method>
         <method name="addMessages"></method>
+        <method name="reload"></method>
             
     </plugin>
         

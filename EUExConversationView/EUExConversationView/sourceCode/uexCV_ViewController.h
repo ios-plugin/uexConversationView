@@ -11,7 +11,7 @@
 
 
 
-
+@class uexCV_TableView;
 @class uexCV_UserInfo;
 @class EUExConversationView;
 
@@ -30,7 +30,7 @@ typedef void (^pullRefreshBlock)();
 @property(nonatomic,strong)uexCV_UserInfo * meInfo;
 @property(nonatomic,strong)uexCV_UserInfo * youInfo;
 @property(nonatomic,strong)NSDictionary * extras;
-
+@property(nonatomic,strong)uexCV_TableView * tableView;
 -(instancetype)initWithFrame:(CGRect)frame
                        bgImg:(UIImage *)bgImg
                       meInfo:(uexCV_UserInfo *)me
