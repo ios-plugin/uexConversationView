@@ -26,6 +26,7 @@
 		4289E0F71BAD31BF00ED552F /* voice3.png in Resources */ = {isa = PBXBuildFile; fileRef = 4289E0F31BAD31BF00ED552F /* voice3.png */; settings = {ASSET_TAGS = (); }; };
 		4289E0F81BAD31BF00ED552F /* voice2.png in Resources */ = {isa = PBXBuildFile; fileRef = 4289E0F41BAD31BF00ED552F /* voice2.png */; settings = {ASSET_TAGS = (); }; };
 		4289E0F91BAD31BF00ED552F /* voice4.png in Resources */ = {isa = PBXBuildFile; fileRef = 4289E0F51BAD31BF00ED552F /* voice4.png */; settings = {ASSET_TAGS = (); }; };
+		42BC55011BB4D6F000E096E7 /* MJFresh.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42BC55001BB4D6F000E096E7 /* MJFresh.framework */; settings = {ASSET_TAGS = (); }; };
 		42C6695F1BA9710E000DBD37 /* amrFileCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C669521BA9710E000DBD37 /* amrFileCodec.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42C669601BA9710E000DBD37 /* libopencore-amrnb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C6695B1BA9710E000DBD37 /* libopencore-amrnb.a */; };
 		42C669611BA9710E000DBD37 /* libopencore-amrwb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C6695C1BA9710E000DBD37 /* libopencore-amrwb.a */; };
@@ -111,6 +112,7 @@
 		4289E0F31BAD31BF00ED552F /* voice3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = voice3.png; sourceTree = "<group>"; };
 		4289E0F41BAD31BF00ED552F /* voice2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = voice2.png; sourceTree = "<group>"; };
 		4289E0F51BAD31BF00ED552F /* voice4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = voice4.png; sourceTree = "<group>"; };
+		42BC55001BB4D6F000E096E7 /* MJFresh.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MJFresh.framework; sourceTree = "<group>"; };
 		42C669511BA9710E000DBD37 /* amrFileCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = amrFileCodec.h; sourceTree = "<group>"; };
 		42C669521BA9710E000DBD37 /* amrFileCodec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = amrFileCodec.m; sourceTree = "<group>"; };
 		42C669551BA9710E000DBD37 /* interf_dec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interf_dec.h; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42BC55011BB4D6F000E096E7 /* MJFresh.framework in Frameworks */,
 				421D76181BA80A5900659BF8 /* QuartzCore.framework in Frameworks */,
 				42C669611BA9710E000DBD37 /* libopencore-amrwb.a in Frameworks */,
 				42C669601BA9710E000DBD37 /* libopencore-amrnb.a in Frameworks */,
@@ -219,6 +222,7 @@
 		4201D71F1BA69299007D6036 /* sourceCode */ = {
 			isa = PBXGroup;
 			children = (
+				42BC55001BB4D6F000E096E7 /* MJFresh.framework */,
 				42C669631BA97404000DBD37 /* Masonry */,
 				421D76001BA7F88700659BF8 /* uexCV_TableView */,
 				42C669501BA9710E000DBD37 /* arm */,

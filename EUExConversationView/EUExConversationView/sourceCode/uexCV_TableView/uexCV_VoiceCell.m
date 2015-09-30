@@ -104,6 +104,9 @@
     if(result>uexCV_inner_max_width_multipier){
         result=uexCV_inner_max_width_multipier;
     }
+    if(result<0.05){
+        result=0.1;
+    }
     return result;
 }
 

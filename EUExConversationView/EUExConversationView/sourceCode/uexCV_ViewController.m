@@ -67,6 +67,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
     self.tableView.allowsSelection=NO;
     //self.tableView.estimatedRowHeight = 40;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
+    /*
         self.tableView.header=[MJRefreshNormalHeader headerWithRefreshingBlock:^{
         self.isRefreshing=YES;
         if(self.loadHistoryBlock){
@@ -77,7 +78,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
 
     }];
     
-    
+    */
     
     [self.view addSubview:self.tableView];
 
@@ -119,6 +120,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
                     //oldOffset.y =self.tableView.contentSize.height-oldHeight;
                     [_tableView setContentOffset:oldOffset];
                 }
+                [self.tableView reloadData];
             });
 
             
@@ -134,6 +136,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
                 oldOffset.y +=self.tableView.contentSize.height-oldHeight;
                 [_tableView setContentOffset:oldOffset];
+                [self endRefreshing];
             });
             break;
         }
@@ -170,7 +173,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
 
 -(void)endRefreshing{
     [self.tableView reloadData];
-    [self.tableView.header endRefreshing];
+    //[self.tableView.header endRefreshing];
     self.isRefreshing=NO;
 }
 
