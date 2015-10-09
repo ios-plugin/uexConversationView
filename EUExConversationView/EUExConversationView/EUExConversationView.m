@@ -99,6 +99,41 @@
     [self.vc.tableView reloadData];
 }
 
+
+
+-(void)changeStatusByTimestamp:(NSMutableArray *)inArguments{
+    if([inArguments count] < 1){
+        return;
+    }
+    id info = [inArguments[0] JSONValue];
+    if(!info || ![info isKindOfClass:[NSDictionary class]]){
+        return;
+    }
+    NSInteger ts=[info[@"timestamp"] integerValue];
+    if([info objectForKey:@"status"]&&[[info objectForKey:@"status"] integerValue]==2){
+        [self.vc changeErrorLabel:NO byTimestamp:ts];
+    }
+    if([info objectForKey:@"status"]&&[[info objectForKey:@"status"] integerValue]==1){
+        [self.vc changeErrorLabel:YES byTimestamp:ts];
+    }
+    if([info objectForKey:@"status"]&&[[info objectForKey:@"status"] integerValue]==0){
+        [self.vc changeErrorLabel:YES byTimestamp:ts];
+    }
+}
+
+
+-(void)deleteMessageByTimestamp:(NSMutableArray *)inArguments{
+    if([inArguments count] < 1){
+        return;
+    }
+    id info = [inArguments[0] JSONValue];
+    if(!info || ![info isKindOfClass:[NSDictionary class]]){
+        return;
+    }
+    NSInteger ts=[info[@"timestamp"] integerValue];
+    [self.vc deleteMessageByTimestamp:ts];
+}
+
 #pragma mark - Private Methods
 
 -(uexCV_UserInfo *)defineUserInfo:(NSString *)user inDataDict:(NSDictionary *)dict{

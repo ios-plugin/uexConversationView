@@ -12,5 +12,5 @@
 #import "JSON.h"
 #import "EUExBase+Bundle.h"
 @interface EUExConversationView : EUExBase
-
+-(void)callbackJsonWithName:(NSString *)name Object:(id)obj;
 @end

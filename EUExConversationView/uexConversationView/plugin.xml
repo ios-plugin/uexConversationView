@@ -6,6 +6,8 @@
         <method name="close"></method>
         <method name="addMessages"></method>
         <method name="reload"></method>
+        <method name="changeStatusByTimestamp"></method>
+        <method name="deleteMessageByTimestamp"></method>
             
     </plugin>
         

@@ -81,6 +81,15 @@
     
     self.onClick=data[@"onClick"];
     
+    
+    [self.errorLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        if(!uexCV_from_you){
+            make.right.lessThanOrEqualTo(ws.durationView.mas_left).with.offset(-2*uexCV_default_margin);
+        }else{
+            make.left.greaterThanOrEqualTo(ws.durationView.mas_right).with.offset(2*uexCV_default_margin);
+        }
+    }];
+    
 }
 
 

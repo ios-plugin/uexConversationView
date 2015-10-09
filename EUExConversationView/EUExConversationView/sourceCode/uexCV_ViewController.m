@@ -29,9 +29,27 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
 @end
 
 @implementation uexCV_ViewController
+-(void)changeErrorLabel:(BOOL)isHidden byTimestamp:(NSInteger)ts{
+    for(uexCV_TableViewCell *cell in self.cells){
+        if(cell.timestamp==ts){
+            cell.errorLabel.hidden=isHidden;
+        }
+    }
+    [self.tableView reloadData];
+}
 
-
-
+-(void)deleteMessageByTimestamp:(NSInteger)ts{
+    NSMutableArray *tmp=[NSMutableArray array];
+    for(uexCV_TableViewCell *cell in self.cells){
+        if(cell.timestamp==ts){
+            [tmp addObject:cell];
+        }
+    }
+    for(uexCV_TableViewCell *cell in tmp){
+        [self.cells removeObject:cell];
+    }
+    [self.tableView reloadData];
+}
 
 -(instancetype)initWithFrame:(CGRect)frame
                        bgImg:(UIImage *)bgImg
@@ -60,6 +78,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
     [self registerKeyboardActions];
     self.view.frame=self.frame;
     self.tableView=[[uexCV_TableView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    self.tableView.superViewController=self;
     self.tableView.backgroundView=[[UIImageView alloc]initWithImage:self.bgImage];
     self.tableView.dataSource=self;
     self.tableView.delegate=self;
@@ -105,17 +124,21 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
                 [self.cells addObject:[self cellForMessageData:data[i]]];
             }
             CGFloat distanceToBottom=oldHeight-self.frame.size.height-oldOffset.y;
-            NSLog(@"dis:%f",distanceToBottom);
+            //NSLog(@"dis:%f",distanceToBottom);
             if(distanceToBottom<200){
                 
                 isScrollToButtom=YES;
             }
             [self.tableView reloadData];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
-                NSLog(@"O:%f,N:%f",oldHeight,self.tableView.contentSize.height);
+                //NSLog(@"O:%f,N:%f",oldHeight,self.tableView.contentSize.height);
                 if(isScrollToButtom){
-                    NSIndexPath *indexPath=[NSIndexPath indexPathForRow:self.cells.count-1 inSection:0];
-                    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+                    NSInteger targetRow=self.cells.count-1;
+                    if(targetRow>0){
+                        NSIndexPath *indexPath=[NSIndexPath indexPathForRow:targetRow inSection:0];
+                        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+                    }
+
                 }else{
                     //oldOffset.y =self.tableView.contentSize.height-oldHeight;
                     [_tableView setContentOffset:oldOffset];

@@ -40,4 +40,8 @@ typedef void (^pullRefreshBlock)();
 
 
 -(void)addData:(NSArray*)data type:(uexConversationViewAddDataType)type;
+
+
+-(void)changeErrorLabel:(BOOL)isHidden byTimestamp:(NSInteger)ts;
+-(void)deleteMessageByTimestamp:(NSInteger)ts;
 @end

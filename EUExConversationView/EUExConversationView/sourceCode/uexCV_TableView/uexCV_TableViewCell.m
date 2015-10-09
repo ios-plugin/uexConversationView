@@ -8,15 +8,16 @@
 
 #import "uexCV_TableViewCell.h"
 #import "uexCV_Bubble.h"
-
-
+#import "uexCV_TableView.h"
+#import "uexCV_ViewController.h"
+#import "EUExConversationView.h"
 
 #define uexCV_nickname_label_color [UIColor uexCV_colorFromHtmlString:@"#696969"]
 #define uexCV_nickname_label_size 14
 #define uexCV_photo_size @50
 #define uexCV_photo_cornor_radius 3
 #define uexCV_message_shadow_radius 1
-
+#define uexCV_error_label_size 30
 @implementation uexCV_TableViewCell
 
 - (void)awakeFromNib {
@@ -62,14 +63,15 @@
     
     
    
-    
+    self.timestamp=[data[@"timestamp"] integerValue];
+    self.containerView.userInteractionEnabled=YES;
     
     //timeLabel
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
     [formatter setDateStyle:NSDateFormatterMediumStyle];
     [formatter setTimeStyle:NSDateFormatterShortStyle];
     [formatter setDateFormat:@"MM-dd   HH:mm:ss"];
-    NSDate *date = [NSDate dateWithTimeIntervalSince1970:[data[@"timestamp"] doubleValue]/1000];
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:[@(self.timestamp) doubleValue]/1000];
     NSString *time = [formatter stringFromDate:date];
     self.timeLabel=[[UILabel alloc]init];
     [_timeLabel setText:time];
@@ -144,19 +146,37 @@
         }
     }];
     
-    //self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
-    //self.translatesAutoresizingMaskIntoConstraints=NO;
-    //self.contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    /*
-    [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.height.lessThanOrEqualTo(@(50));
-        NSLog(@"w:%f h:%f",ws.frame.size.width,ws.frame.size.height);
-        //make.edges.equalTo(ws);
+    //errorLabel
+    self.errorLabel = [[UILabel alloc]init];
+    _errorLabel.userInteractionEnabled=YES;
+    [_errorLabel setText:@"!"];
+
+    [_errorLabel setFont:[UIFont systemFontOfSize:15]];
+    //[_errorLabel setBackgroundColor:[UIColor blueColor]];
+    [_errorLabel setTextColor:[UIColor redColor]];
+    UITapGestureRecognizer *tapGes=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onErrorLabelClick:)];
+    [_errorLabel addGestureRecognizer:tapGes];
+
+    [uexCV_cell_container addSubview:_errorLabel];
+    [_errorLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(ws.messageView.mas_centerY);
+        make.width.equalTo(@(uexCV_error_label_size));
+        make.height.equalTo(@(uexCV_error_label_size));
+        if(!uexCV_from_you){
+            make.right.lessThanOrEqualTo(ws.messageView.mas_left).with.offset(-2*uexCV_default_margin);
+            [ws.errorLabel setTextAlignment:NSTextAlignmentRight];
+        }else{
+            make.left.greaterThanOrEqualTo(ws.messageView.mas_right).with.offset(2*uexCV_default_margin);
+        }
     }];
-    */
+    _errorLabel.hidden=YES;
+
 }
 
-
+-(void)onErrorLabelClick:(id)sender{
+    
+    [self.tableView.superViewController.euexObj callbackJsonWithName:@"onErrorLabelClicked" Object:@{@"timestamp":@(_timestamp)}];
+}
 
 
 

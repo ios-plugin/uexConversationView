@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "uexCV_VoiceCell.h"
 #import "uexCV_TextCell.h"
+@class uexCV_ViewController;
 @interface uexCV_TableView : UITableView
-
+@property (nonatomic,weak)uexCV_ViewController *superViewController;
 @end
