@@ -29,7 +29,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
 @end
 
 @implementation uexCV_ViewController
--(void)changeErrorLabel:(BOOL)isHidden byTimestamp:(NSInteger)ts{
+-(void)changeErrorLabel:(BOOL)isHidden byTimestamp:(long long)ts{
     for(uexCV_TableViewCell *cell in self.cells){
         if(cell.timestamp==ts){
             cell.errorLabel.hidden=isHidden;
@@ -38,7 +38,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
     [self.tableView reloadData];
 }
 
--(void)deleteMessageByTimestamp:(NSInteger)ts{
+-(void)deleteMessageByTimestamp:(long long)ts{
     NSMutableArray *tmp=[NSMutableArray array];
     for(uexCV_TableViewCell *cell in self.cells){
         if(cell.timestamp==ts){
@@ -66,6 +66,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
         self.youInfo=you;
         self.extras=extras;
         self.euexObj=euexObj;
+        self.keyboardOffsetY=0;
         [self initPlayer];
         
     }
@@ -211,7 +212,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
     NSInteger from =[data[@"from"] integerValue];
     [msgData setValue:@(from) forKey:@"from"];
     [msgData setValue:data[@"timestamp"] forKey:@"timestamp"];
-    
+    [msgData setValue:data[@"status"] forKey:@"status"];
     uexCV_TableViewCell *cell=nil;
     [msgData setValue:@(self.frame.size.width) forKey:@"maxWidth"];
     if(type == 1){
@@ -361,13 +362,17 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
     
     [UIView animateWithDuration:[notif.userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue] animations:^{
         
-        self.view.transform=CGAffineTransformMakeTranslation(0, -deltaY);
+        
+        CGRect tmpFrame=self.frame;
+        tmpFrame.size.height=tmpFrame.size.height-deltaY+self.keyboardOffsetY;
+        self.view.frame=tmpFrame;
+        //self.view.transform=CGAffineTransformMakeTranslation(0, -deltaY+self.keyboardOffsetY);
     }];
 }
 -(void)keyboardHide:(NSNotification *)notif
 {
     [UIView animateWithDuration:[notif.userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue] animations:^{
-        self.view.transform = CGAffineTransformIdentity;
+        self.view.frame=self.frame;
     }];
 }
 

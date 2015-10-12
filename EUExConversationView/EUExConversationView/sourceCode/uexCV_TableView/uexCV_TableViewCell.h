@@ -41,7 +41,7 @@ typedef NS_ENUM(NSInteger, uexCV_TableViewCellStatus) {
 @property (nonatomic,strong)UILabel * nameLabel;
 @property (nonatomic,strong)UIView *containerView;
 @property (nonatomic,strong)UILabel * errorLabel;
-@property (nonatomic,assign)NSInteger timestamp;
+@property (nonatomic,assign)long long timestamp;
 
 
 

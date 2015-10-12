@@ -63,7 +63,7 @@
     
     
    
-    self.timestamp=[data[@"timestamp"] integerValue];
+    self.timestamp=[data[@"timestamp"] longLongValue];
     self.containerView.userInteractionEnabled=YES;
     
     //timeLabel
@@ -169,7 +169,13 @@
             make.left.greaterThanOrEqualTo(ws.messageView.mas_right).with.offset(2*uexCV_default_margin);
         }
     }];
-    _errorLabel.hidden=YES;
+    NSInteger status=[data[@"status"] integerValue];
+    if(status == 2){
+        _errorLabel.hidden=NO;
+    }else{
+       _errorLabel.hidden=YES;
+    }
+    
 
 }
 

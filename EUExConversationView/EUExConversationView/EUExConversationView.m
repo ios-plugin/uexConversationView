@@ -59,6 +59,10 @@
                                                                   youInfo:[self defineUserInfo:@"you" inDataDict:info]
                                                                    extras:nil
                                                                   euexObj:self];
+    
+    if([info objectForKey:@"keyboardOffsetY"]){
+        vc.keyboardOffsetY=[[info objectForKey:@"keyboardOffsetY"] floatValue];
+    }
     self.vc=vc;
     //[EUtility brwView:meBrwView addSubview:vc.view];
     [EUtility brwView:meBrwView addSubviewToScrollView:vc.view];

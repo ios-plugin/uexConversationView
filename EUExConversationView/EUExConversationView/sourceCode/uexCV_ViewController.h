@@ -31,17 +31,19 @@ typedef void (^pullRefreshBlock)();
 @property(nonatomic,strong)uexCV_UserInfo * youInfo;
 @property(nonatomic,strong)NSDictionary * extras;
 @property(nonatomic,strong)uexCV_TableView * tableView;
+
+@property(nonatomic,assign)CGFloat keyboardOffsetY;
 -(instancetype)initWithFrame:(CGRect)frame
                        bgImg:(UIImage *)bgImg
                       meInfo:(uexCV_UserInfo *)me
                      youInfo:(uexCV_UserInfo *)you
-                      extras:(NSDictionary *)extras
+                      extras:(NSDictionary *)extras 
                      euexObj:(EUExConversationView *)euexObj;
 
 
 -(void)addData:(NSArray*)data type:(uexConversationViewAddDataType)type;
 
 
--(void)changeErrorLabel:(BOOL)isHidden byTimestamp:(NSInteger)ts;
--(void)deleteMessageByTimestamp:(NSInteger)ts;
+-(void)changeErrorLabel:(BOOL)isHidden byTimestamp:(long long)ts;
+-(void)deleteMessageByTimestamp:(long long)ts;
 @end
