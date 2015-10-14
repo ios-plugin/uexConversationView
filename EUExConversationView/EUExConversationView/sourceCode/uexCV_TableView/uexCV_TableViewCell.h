@@ -16,7 +16,7 @@
 
 
 #define uexCV_default_margin 2
-#define uexCV_inner_padding UIEdgeInsetsMake(5,10,5,8)
+#define uexCV_inner_padding UIEdgeInsetsMake(10,10,10,8)
 #define uexCV_inner_max_width_multipier 0.5
 #define uexCV_default_label_color [UIColor uexCV_colorFromHtmlString:@"#ff4800"]
 #define uexCV_default_label_size 10

@@ -113,7 +113,7 @@
     if(!info || ![info isKindOfClass:[NSDictionary class]]){
         return;
     }
-    NSInteger ts=[info[@"timestamp"] integerValue];
+    long long ts=[info[@"timestamp"] longLongValue];
     if([info objectForKey:@"status"]&&[[info objectForKey:@"status"] integerValue]==2){
         [self.vc changeErrorLabel:NO byTimestamp:ts];
     }
@@ -134,8 +134,13 @@
     if(!info || ![info isKindOfClass:[NSDictionary class]]){
         return;
     }
-    NSInteger ts=[info[@"timestamp"] integerValue];
+    long long ts=[info[@"timestamp"] longLongValue];
     [self.vc deleteMessageByTimestamp:ts];
+}
+
+
+-(void)stopPlaying:(NSMutableArray *)inArguments{
+    [self.vc stopPlaying];
 }
 
 #pragma mark - Private Methods

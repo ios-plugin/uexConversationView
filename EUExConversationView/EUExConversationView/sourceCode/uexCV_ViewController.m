@@ -233,12 +233,8 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
         error=nil;
         WS(ws);
         clickBlock block =^(){
-            if(ws.player){
-                if([ws.player isPlaying]){
-                    [ws.player stop];
-                }
-                ws.player=nil;
-            }
+            [self stopPlaying];
+
             NSError * anoError=nil;
             NSData *amrData=[NSData dataWithContentsOfFile:path];
             
@@ -262,6 +258,23 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
     [cell updateConstraintsIfNeeded];
     return cell;
 
+}
+
+
+
+-(void)stopPlaying{
+    if(self.player){
+        if([self.player isPlaying]){
+            for(uexCV_TableViewCell *cell in self.cells){
+                if([cell isKindOfClass:[uexCV_VoiceCell class]]){
+                    ((uexCV_VoiceCell *)cell).isPlaying=NO;
+                }
+            }
+            [self.player stop];
+            
+        }
+        self.player=nil;
+    }
 }
 /*
 #pragma mark - Navigation

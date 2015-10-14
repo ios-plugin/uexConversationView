@@ -46,4 +46,5 @@ typedef void (^pullRefreshBlock)();
 
 -(void)changeErrorLabel:(BOOL)isHidden byTimestamp:(long long)ts;
 -(void)deleteMessageByTimestamp:(long long)ts;
+-(void)stopPlaying;
 @end

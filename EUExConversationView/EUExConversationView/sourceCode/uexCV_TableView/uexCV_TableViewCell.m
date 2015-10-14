@@ -16,7 +16,7 @@
 #define uexCV_nickname_label_size 14
 #define uexCV_photo_size @50
 #define uexCV_photo_cornor_radius 3
-#define uexCV_message_shadow_radius 1
+
 #define uexCV_error_label_size 30
 @implementation uexCV_TableViewCell
 
@@ -130,9 +130,9 @@
 
     if(!uexCV_from_you){
         _messageView.transform=CGAffineTransformMakeScale(-1, 1);
-        _messageView.layer.shadowOffset=CGSizeMake(-1, 1);
+        //_messageView.layer.shadowOffset=CGSizeMake(-1, 1);
     }else{
-        _messageView.layer.shadowOffset=CGSizeMake(1, 1);
+        //_messageView.layer.shadowOffset=CGSizeMake(1, 1);
     }
     [uexCV_cell_container addSubview:_messageView];
     [_messageView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -176,6 +176,7 @@
        _errorLabel.hidden=YES;
     }
     
+
 
 }
 

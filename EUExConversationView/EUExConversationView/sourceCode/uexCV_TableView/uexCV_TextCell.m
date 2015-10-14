@@ -52,13 +52,13 @@
         
         
         make.width.lessThanOrEqualTo(uexCV_cell_container.mas_width).multipliedBy(uexCV_inner_max_width_multipier);
-        make.height.equalTo(@(labelsize.height+5));
+        make.height.greaterThanOrEqualTo(@(labelsize.height+5));
         
         make.edges.equalTo(ws.messageView).with.insets(uexCV_inner_padding);
     }];
     
-    [self.containerView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.height.greaterThanOrEqualTo(@(MAX(44, labelsize.height+20)) );
+    [self.messageView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.height.greaterThanOrEqualTo(@(40));
     }];
 
 }
