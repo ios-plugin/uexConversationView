@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import <AVFoundation/AVFoundation.h>
 
 
 
@@ -31,6 +31,8 @@ typedef void (^pullRefreshBlock)();
 @property(nonatomic,strong)uexCV_UserInfo * youInfo;
 @property(nonatomic,strong)NSDictionary * extras;
 @property(nonatomic,strong)uexCV_TableView * tableView;
+@property(nonatomic,strong)AVAudioPlayer * player;
+@property(nonatomic,strong)NSIndexPath * currentPlayingIndex;
 
 @property(nonatomic,assign)CGFloat keyboardOffsetY;
 -(instancetype)initWithFrame:(CGRect)frame
@@ -46,5 +48,5 @@ typedef void (^pullRefreshBlock)();
 
 -(void)changeErrorLabel:(BOOL)isHidden byTimestamp:(long long)ts;
 -(void)deleteMessageByTimestamp:(long long)ts;
--(void)stopPlaying;
+-(void)stopPlaying:(BOOL)continually;
 @end

@@ -140,7 +140,7 @@
 
 
 -(void)stopPlaying:(NSMutableArray *)inArguments{
-    [self.vc stopPlaying];
+    [self.vc stopPlaying:NO];
 }
 
 #pragma mark - Private Methods

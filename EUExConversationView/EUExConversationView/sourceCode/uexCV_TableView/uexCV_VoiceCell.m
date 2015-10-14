@@ -8,10 +8,18 @@
 
 #import "uexCV_VoiceCell.h"
 #import "uexCV_TableView.h"
+#import "uexCV_ViewController.h"
 #define uexCV_horn_height 20
 
 #define uexCV_duration_view_radius 10
 #define uexCV_duration_view_bgColor [UIColor whiteColor]
+
+
+
+@interface uexCV_VoiceCell()
+
+@end
+
 @implementation uexCV_VoiceCell
 
 /*
@@ -91,16 +99,43 @@
     
 }
 
+-(void)stopPlaying{
+    if(self.isPlaying){
+
+        self.isPlaying=NO;
+    }
+    
+
+
+
+
+    
+    
+}
 
 -(void)onClick:(id)sender{
     if(self.onClick){
+
+        [self.tableView.superViewController stopPlaying:YES];
+
+        if(self.tableView.superViewController.currentPlayingIndex ==self.inCellIndex){
+            self.tableView.superViewController.currentPlayingIndex=nil;
+            
+            return;
+        }
         self.onClick();
+        self.tableView.superViewController.currentPlayingIndex=self.inCellIndex;
+
         self.isPlaying=YES;
+        
         [self cyc];
+        
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.duration*1000 * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
             self.isPlaying=NO;
             
         });
+
+
         
     }
 }
@@ -178,7 +213,7 @@
     [_horn addSubview:hornView];
 
     self.hornStatus=status;
-    NSLog(@"%ld",self.hornStatus);
+    //NSLog(@"%ld",self.hornStatus);
 }
 
 @end

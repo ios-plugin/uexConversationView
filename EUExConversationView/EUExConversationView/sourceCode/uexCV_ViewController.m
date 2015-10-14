@@ -10,7 +10,7 @@
 #import "uexCV_TableView.h"
 
 #import <AudioToolbox/AudioToolbox.h>
-#import <AVFoundation/AVFoundation.h>
+
 #import "EUExConversationView.h"
 #import "amrFileCodec.h"
 
@@ -25,7 +25,9 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
 @property(nonatomic,strong) NSMutableArray * cells;
 @property(nonatomic,strong) UIImage * bgImage;
 @property(nonatomic,assign) BOOL isRefreshing;
-@property(nonatomic,strong) AVAudioPlayer * player;
+
+
+
 @end
 
 @implementation uexCV_ViewController
@@ -231,9 +233,10 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
         }
         _player=nil;
         error=nil;
+        
         WS(ws);
         clickBlock block =^(){
-            [self stopPlaying];
+
 
             NSError * anoError=nil;
             NSData *amrData=[NSData dataWithContentsOfFile:path];
@@ -262,15 +265,19 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
 
 
 
--(void)stopPlaying{
+-(void)stopPlaying:(BOOL)continually{
     if(self.player){
         if([self.player isPlaying]){
             for(uexCV_TableViewCell *cell in self.cells){
                 if([cell isKindOfClass:[uexCV_VoiceCell class]]){
-                    ((uexCV_VoiceCell *)cell).isPlaying=NO;
+                    uexCV_VoiceCell *voiceCell=(uexCV_VoiceCell *)cell;
+                    [voiceCell stopPlaying];
                 }
             }
             [self.player stop];
+            if(!continually){
+                self.currentPlayingIndex=nil;
+            }
             
         }
         self.player=nil;
@@ -348,12 +355,14 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag{
     [self.player stop];
     self.player=nil;
+    self.currentPlayingIndex=nil;
 }
 
 /* if an error occurs while decoding it will be reported to the delegate. */
 - (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError *)error{
     [self.player stop];
     self.player=nil;
+    self.currentPlayingIndex=nil;
 }
 #pragma mark - Keyboard Action
 

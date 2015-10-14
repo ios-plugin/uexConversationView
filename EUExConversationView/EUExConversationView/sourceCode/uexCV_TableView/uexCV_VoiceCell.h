@@ -25,4 +25,7 @@ typedef NS_ENUM(NSInteger,uexCV_hornView_status){
 @property (nonatomic,assign)uexCV_hornView_status hornStatus;
 @property (nonatomic,assign)BOOL isPlaying;
 @property (nonatomic,assign)double duration;
+
+
+-(void)stopPlaying;
 @end
