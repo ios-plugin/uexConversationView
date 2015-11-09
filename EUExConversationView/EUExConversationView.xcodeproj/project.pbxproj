@@ -20,13 +20,13 @@
 		421D76131BA80A3B00659BF8 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 421D76121BA80A3B00659BF8 /* AudioToolbox.framework */; };
 		421D76171BA80A4600659BF8 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 421D76161BA80A4600659BF8 /* AVFoundation.framework */; };
 		421D76181BA80A5900659BF8 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 421D76101BA80A1D00659BF8 /* QuartzCore.framework */; };
-		4289E0EB1BAD147600ED552F /* uexCV_Bubble.m in Sources */ = {isa = PBXBuildFile; fileRef = 4289E0EA1BAD147600ED552F /* uexCV_Bubble.m */; settings = {ASSET_TAGS = (); }; };
-		4289E0EE1BAD274600ED552F /* UIColor+uexCV.m in Sources */ = {isa = PBXBuildFile; fileRef = 4289E0ED1BAD274600ED552F /* UIColor+uexCV.m */; settings = {ASSET_TAGS = (); }; };
-		4289E0F61BAD31BF00ED552F /* voice1.png in Resources */ = {isa = PBXBuildFile; fileRef = 4289E0F21BAD31BF00ED552F /* voice1.png */; settings = {ASSET_TAGS = (); }; };
-		4289E0F71BAD31BF00ED552F /* voice3.png in Resources */ = {isa = PBXBuildFile; fileRef = 4289E0F31BAD31BF00ED552F /* voice3.png */; settings = {ASSET_TAGS = (); }; };
-		4289E0F81BAD31BF00ED552F /* voice2.png in Resources */ = {isa = PBXBuildFile; fileRef = 4289E0F41BAD31BF00ED552F /* voice2.png */; settings = {ASSET_TAGS = (); }; };
-		4289E0F91BAD31BF00ED552F /* voice4.png in Resources */ = {isa = PBXBuildFile; fileRef = 4289E0F51BAD31BF00ED552F /* voice4.png */; settings = {ASSET_TAGS = (); }; };
-		42BC55011BB4D6F000E096E7 /* MJFresh.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42BC55001BB4D6F000E096E7 /* MJFresh.framework */; settings = {ASSET_TAGS = (); }; };
+		4289E0EB1BAD147600ED552F /* uexCV_Bubble.m in Sources */ = {isa = PBXBuildFile; fileRef = 4289E0EA1BAD147600ED552F /* uexCV_Bubble.m */; };
+		4289E0EE1BAD274600ED552F /* UIColor+uexCV.m in Sources */ = {isa = PBXBuildFile; fileRef = 4289E0ED1BAD274600ED552F /* UIColor+uexCV.m */; };
+		4289E0F61BAD31BF00ED552F /* voice1.png in Resources */ = {isa = PBXBuildFile; fileRef = 4289E0F21BAD31BF00ED552F /* voice1.png */; };
+		4289E0F71BAD31BF00ED552F /* voice3.png in Resources */ = {isa = PBXBuildFile; fileRef = 4289E0F31BAD31BF00ED552F /* voice3.png */; };
+		4289E0F81BAD31BF00ED552F /* voice2.png in Resources */ = {isa = PBXBuildFile; fileRef = 4289E0F41BAD31BF00ED552F /* voice2.png */; };
+		4289E0F91BAD31BF00ED552F /* voice4.png in Resources */ = {isa = PBXBuildFile; fileRef = 4289E0F51BAD31BF00ED552F /* voice4.png */; };
+		42BC55011BB4D6F000E096E7 /* MJFresh.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42BC55001BB4D6F000E096E7 /* MJFresh.framework */; };
 		42C6695F1BA9710E000DBD37 /* amrFileCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C669521BA9710E000DBD37 /* amrFileCodec.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42C669601BA9710E000DBD37 /* libopencore-amrnb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C6695B1BA9710E000DBD37 /* libopencore-amrnb.a */; };
 		42C669611BA9710E000DBD37 /* libopencore-amrwb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C6695C1BA9710E000DBD37 /* libopencore-amrwb.a */; };
@@ -84,7 +84,6 @@
 		4201D72A1BA692C4007D6036 /* prefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = prefixHeader.pch; sourceTree = "<group>"; };
 		421D74581BA7A3E100659BF8 /* EUExBase+Bundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EUExBase+Bundle.h"; sourceTree = "<group>"; };
 		421D745D1BA7A40300659BF8 /* uexConversationView.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = uexConversationView.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
-		421D74601BA7A40400659BF8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		421D75C51BA7C53900659BF8 /* uexCV_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uexCV_ViewController.h; sourceTree = "<group>"; };
 		421D75C61BA7C53900659BF8 /* uexCV_ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = uexCV_ViewController.m; sourceTree = "<group>"; };
 		421D75CA1BA7CD0B00659BF8 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/System/Library/Frameworks/Quartz.framework; sourceTree = DEVELOPER_DIR; };
@@ -264,7 +263,6 @@
 		421D745F1BA7A40400659BF8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				421D74601BA7A40400659BF8 /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -657,7 +655,8 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = uexConversationViewBundle/Info.plist;
+				INFOPLIST_EXPAND_BUILD_SETTINGS = NO;
+				INFOPLIST_FILE = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_MODULE_NAME = uexConversationView;
@@ -677,7 +676,8 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/EUExConversationView/sourceCode",
 				);
-				INFOPLIST_FILE = uexConversationViewBundle/Info.plist;
+				INFOPLIST_EXPAND_BUILD_SETTINGS = NO;
+				INFOPLIST_FILE = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_MODULE_NAME = uexConversationView;
