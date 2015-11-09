@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <uexplugins>
     <plugin
-        uexName="uexConversationView" version="3.0.2" build="2">
-        <info>2:录音播放功能优化</info>
+        uexName="uexConversationView" version="3.0.3" build="3">
+        <info>3:删去info.plist</info>
+        <build>2:录音播放功能优化</build>
         <build>1:添加删除接口</build>
         <build>0:聊天视图插件</build>
 
