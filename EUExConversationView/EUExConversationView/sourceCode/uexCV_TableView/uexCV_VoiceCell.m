@@ -30,18 +30,22 @@
 }
 */
 
--(void)modifiedCellWithMessageData:(NSDictionary*)data userInfo:(uexCV_UserInfo *)info{
-    [super modifiedCellWithMessageData:data userInfo:info];
-    WS(ws);
-    self.duration=[data[@"duration"] doubleValue];
-    
+-(void)modifiedCellWithMessageData:(uexCV_TableViewCellData *)data{
+    [super modifiedCellWithMessageData:data];
+    @weakify(self);
+       
     //horn
 
     self.hornViews =[NSMutableArray array];
     self.horn=[[UIImageView alloc]init];
     [self.horn setContentMode:UIViewContentModeLeft];
     self.horn.userInteractionEnabled=YES;
-    UITapGestureRecognizer *tapGes=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onClick:)];
+    //UITapGestureRecognizer *tapGes=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onClick:)];
+    
+    UITapGestureRecognizer *tgr=[[UITapGestureRecognizer alloc] init];
+    [[tgr.rac_gestureSignal takeUntil:self.rac_prepareForReuseSignal]subscribeNext:^(id x) {
+#warning TODO
+    }];
     [self.horn addGestureRecognizer:tapGes];
     for(int i = 0;i<4;i++){
         UIImage *hornImg=[UIImage imageWithContentsOfFile:[[EUtility bundleForPlugin:@"uexConversationView"] pathForResource:[NSString stringWithFormat:@"voice%d",(i+1)] ofType:@"png"]];
@@ -58,9 +62,10 @@
     [self.horn setContentMode:UIViewContentModeLeft];
     [self.messageView addSubview:self.horn];
     [_horn mas_updateConstraints:^(MASConstraintMaker *make) {
+        @strongify(self);
         make.height.equalTo(@(uexCV_horn_height));
-        make.edges.equalTo(ws.messageView).with.insets(uexCV_inner_padding);
-        make.width.equalTo(uexCV_cell_container.mas_width).multipliedBy([ws widthMultipier:self.duration]);
+        make.edges.equalTo(self.messageView).with.insets(uexCV_inner_padding);
+        make.width.equalTo(uexCV_cell_container.mas_width).multipliedBy([self widthMultipier:self.duration]);
     }];
     
     
@@ -77,23 +82,25 @@
     [_durationView setNumberOfLines:1];
     [uexCV_cell_container addSubview:self.durationView];
     [_durationView mas_updateConstraints:^(MASConstraintMaker *make) {
+        @strongify(self);
         make.width.mas_equalTo(@(2*uexCV_duration_view_radius));
         make.height.mas_equalTo(@(2*uexCV_duration_view_radius));
         make.top.equalTo(uexCV_cell_container.mas_top).with.offset(uexCV_default_margin);
         if(!uexCV_from_you){
-            make.right.mas_equalTo(ws.messageView.mas_left).with.offset(-2*uexCV_default_margin);
+            make.right.mas_equalTo(self.messageView.mas_left).with.offset(-2*uexCV_default_margin);
         }else{
-            make.left.mas_equalTo(ws.messageView.mas_right).with.offset(2*uexCV_default_margin);
+            make.left.mas_equalTo(self.messageView.mas_right).with.offset(2*uexCV_default_margin);
             
         }
     }];
     
-    self.onClick=data[@"onClick"];
+
     [self.errorLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        @strongify(self);
         if(!uexCV_from_you){
-            make.right.lessThanOrEqualTo(ws.durationView.mas_left).with.offset(-2*uexCV_default_margin);
+            make.right.lessThanOrEqualTo(self.durationView.mas_left).with.offset(-2*uexCV_default_margin);
         }else{
-            make.left.greaterThanOrEqualTo(ws.durationView.mas_right).with.offset(2*uexCV_default_margin);
+            make.left.greaterThanOrEqualTo(self.durationView.mas_right).with.offset(2*uexCV_default_margin);
         }
     }];
     
@@ -114,7 +121,7 @@
 }
 
 -(void)onClick:(id)sender{
-    if(self.onClick){
+    if(self.data.onClick){
 
         [self.tableView.superViewController stopPlaying:YES];
 
@@ -123,7 +130,7 @@
             
             return;
         }
-        self.onClick();
+        self.data.onClick();
         self.tableView.superViewController.currentPlayingIndex=self.inCellIndex;
 
         self.isPlaying=YES;
@@ -163,7 +170,7 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(300 * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
             [self next];
             
-            [self.tableView reloadRowsAtIndexPaths:@[self.inCellIndex] withRowAnimation:UITableViewRowAnimationNone];
+            [self.tableView reloadRoselfAtIndexPaths:@[self.inCellIndex] withRowAnimation:UITableViewRowAnimationNone];
             [self cyc];
             
             
@@ -204,12 +211,12 @@
 
 
 -(void)hideHorn:(uexCV_hornView_status)status{
-    UIImageView * hornView = ((UIImageView *)self.hornViews[status]);
+    UIImageView * hornView = ((UIImageView *)self.hornVieself[status]);
     [hornView removeFromSuperview];
 }
 -(void)showHorn:(uexCV_hornView_status)status{
 
-    UIImageView * hornView = ((UIImageView *)self.hornViews[status]);
+    UIImageView * hornView = ((UIImageView *)self.hornVieself[status]);
     [_horn addSubview:hornView];
 
     self.hornStatus=status;

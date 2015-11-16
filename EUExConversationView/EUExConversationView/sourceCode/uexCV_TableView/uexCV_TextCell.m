@@ -25,22 +25,22 @@
 
 
 
--(void)modifiedCellWithMessageData:(NSDictionary*)data userInfo:(uexCV_UserInfo *)info{
-    [super modifiedCellWithMessageData:data userInfo:info];
+-(void)modifiedCellWithMessageData:(uexCV_TableViewCellData *)data{
+    [super modifiedCellWithMessageData:data];
     
-    WS(ws);
+    @weakify(self);
     self.msgText=[[UILabel alloc]init];
-    NSString *msgContent=data[@"data"];
+    NSString *msgContent=self.data.data;
     [_msgText setText:msgContent];
-    [_msgText setFont:[UIFont systemFontOfSize:info.fontSize]];
-    [_msgText setTextColor:info.fontColor];
+    [_msgText setFont:[UIFont systemFontOfSize:self.data.info.fontSize]];
+    [_msgText setTextColor:self.data.info.fontColor];
     
     self.msgText.numberOfLines=0;
 
     
-    CGSize labelsize = [msgContent boundingRectWithSize:CGSizeMake(([data[@"maxWidth"] floatValue]-10)*uexCV_inner_max_width_multipier, CGFLOAT_MAX)
+    CGSize labelsize = [msgContent boundingRectWithSize:CGSizeMake((self.data.maxTextWidth-10)*uexCV_inner_max_width_multipier, CGFLOAT_MAX)
                                              options:(NSStringDrawingTruncatesLastVisibleLine|NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
-                                          attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:info.fontSize]}
+                                          attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:self.data.info.fontSize]}
                                              context:nil].size;
     
     NSLog(@"y%f",labelsize.height);
@@ -49,7 +49,7 @@
         _msgText.transform=CGAffineTransformMakeScale(-1, 1);
     }
     [_msgText mas_updateConstraints:^(MASConstraintMaker *make) {
-        
+        @strongify(self);
         
         make.width.lessThanOrEqualTo(uexCV_cell_container.mas_width).multipliedBy(uexCV_inner_max_width_multipier);
         make.height.greaterThanOrEqualTo(@(labelsize.height+5));

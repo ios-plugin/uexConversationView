@@ -7,7 +7,7 @@
 //
 
 #import "uexCV_TableViewCell.h"
-typedef void (^clickBlock)();
+
 
 typedef NS_ENUM(NSInteger,uexCV_hornView_status){
     uexCV_hornView_status_1 = 0,
@@ -20,7 +20,7 @@ typedef NS_ENUM(NSInteger,uexCV_hornView_status){
 @interface uexCV_VoiceCell : uexCV_TableViewCell
 @property (nonatomic,strong)UILabel * durationView;
 @property (nonatomic,strong)UIImageView * horn;
-@property (nonatomic,strong)clickBlock onClick;
+
 @property (nonatomic,strong)NSMutableArray * hornViews;
 @property (nonatomic,assign)uexCV_hornView_status hornStatus;
 @property (nonatomic,assign)BOOL isPlaying;

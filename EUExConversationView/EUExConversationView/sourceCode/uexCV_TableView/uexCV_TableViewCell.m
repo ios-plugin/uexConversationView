@@ -47,8 +47,8 @@
 
 
 
--(void)modifiedCellWithMessageData:(NSDictionary*)data userInfo:(uexCV_UserInfo *)info{
-    self.status=(uexCV_TableViewCellStatus)[data[@"from"] integerValue];
+-(void)modifiedCellWithMessageData:(uexCV_TableViewCellData *)data{
+    self.data=data;
     self.containerView =[[UIView alloc]init];
     self.containerView.userInteractionEnabled=YES;
     [self.contentView addSubview:self.containerView];
@@ -58,12 +58,12 @@
         make.left.equalTo(self.contentView.mas_left);
         make.right.equalTo(self.contentView.mas_right);
     }];
-    WS(ws)
+    @weakify(self);
     
     
     
    
-    self.timestamp=[data[@"timestamp"] longLongValue];
+
     self.containerView.userInteractionEnabled=YES;
     
     //timeLabel
@@ -71,7 +71,7 @@
     [formatter setDateStyle:NSDateFormatterMediumStyle];
     [formatter setTimeStyle:NSDateFormatterShortStyle];
     [formatter setDateFormat:@"MM-dd   HH:mm:ss"];
-    NSDate *date = [NSDate dateWithTimeIntervalSince1970:[@(self.timestamp) doubleValue]/1000];
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:[@(self.data.timestamp) doubleValue]/1000];
     NSString *time = [formatter stringFromDate:date];
     self.timeLabel=[[UILabel alloc]init];
     [_timeLabel setText:time];
@@ -80,18 +80,20 @@
     [uexCV_cell_container addSubview:_timeLabel];
     
     [_timeLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        @strongify(self);
         make.bottom.equalTo(uexCV_cell_container.mas_bottom).with.offset(-2*uexCV_default_margin);
         make.top.greaterThanOrEqualTo(uexCV_cell_container.mas_top);
         make.centerX.equalTo(uexCV_cell_container.mas_centerX);
     }];
     
     //photo
-    self.photo=[[UIImageView alloc]initWithImage:info.photo];
+    self.photo=[[UIImageView alloc]initWithImage:self.data.info.photo];
     [_photo setContentMode:UIViewContentModeScaleToFill];
     _photo.layer.masksToBounds=YES;
     _photo.layer.cornerRadius=uexCV_photo_cornor_radius;
     [uexCV_cell_container addSubview:_photo];
     [_photo mas_updateConstraints:^(MASConstraintMaker *make) {
+        @strongify(self);
         make.width.equalTo(uexCV_photo_size);
         make.height.equalTo(uexCV_photo_size);
         make.top.equalTo(uexCV_cell_container.mas_top).with.offset(uexCV_default_margin);
@@ -104,15 +106,16 @@
     
     //name
     self.nameLabel=[[UILabel alloc]init];
-    [_nameLabel setText:info.nickname];
+    [_nameLabel setText:self.data.info.nickname];
     [_nameLabel setFont:[UIFont systemFontOfSize:uexCV_nickname_label_size]];
     [_nameLabel setTextColor:uexCV_nickname_label_color];
     [uexCV_cell_container addSubview:_nameLabel];
     [_nameLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(ws.photo.mas_bottom).with.offset(2*uexCV_default_margin);
+        @strongify(self);
+        make.top.equalTo(self.photo.mas_bottom).with.offset(2*uexCV_default_margin);
         make.bottom.lessThanOrEqualTo(uexCV_cell_container.mas_bottom).with.offset(-uexCV_default_margin);
         
-        make.centerX.equalTo(ws.photo.mas_centerX).priorityLow();
+        make.centerX.equalTo(self.photo.mas_centerX).priorityLow();
         if(!uexCV_from_you){
             make.right.lessThanOrEqualTo(uexCV_cell_container.mas_right).with.offset(-uexCV_default_margin);
         }else{
@@ -136,13 +139,14 @@
     }
     [uexCV_cell_container addSubview:_messageView];
     [_messageView mas_updateConstraints:^(MASConstraintMaker *make) {
+        @strongify(self);
         make.top.equalTo(uexCV_cell_container.mas_top).with.offset(4*uexCV_default_margin);
-        make.bottom.lessThanOrEqualTo(ws.timeLabel.mas_top).with.offset(-uexCV_default_margin);
+        make.bottom.lessThanOrEqualTo(self.timeLabel.mas_top).with.offset(-uexCV_default_margin);
         
         if(!uexCV_from_you){
-            make.right.equalTo(ws.photo.mas_left).with.offset(-2*uexCV_default_margin);
+            make.right.equalTo(self.photo.mas_left).with.offset(-2*uexCV_default_margin);
         }else{
-            make.left.equalTo(ws.photo.mas_right).with.offset(2*uexCV_default_margin);
+            make.left.equalTo(self.photo.mas_right).with.offset(2*uexCV_default_margin);
         }
     }];
     
@@ -159,30 +163,44 @@
 
     [uexCV_cell_container addSubview:_errorLabel];
     [_errorLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(ws.messageView.mas_centerY);
+        @strongify(self);
+        make.centerY.equalTo(self.messageView.mas_centerY);
         make.width.equalTo(@(uexCV_error_label_size));
         make.height.equalTo(@(uexCV_error_label_size));
         if(!uexCV_from_you){
-            make.right.lessThanOrEqualTo(ws.messageView.mas_left).with.offset(-2*uexCV_default_margin);
-            [ws.errorLabel setTextAlignment:NSTextAlignmentRight];
+            make.right.lessThanOrEqualTo(self.messageView.mas_left).with.offset(-2*uexCV_default_margin);
+            [self.errorLabel setTextAlignment:NSTextAlignmentRight];
         }else{
-            make.left.greaterThanOrEqualTo(ws.messageView.mas_right).with.offset(2*uexCV_default_margin);
+            make.left.greaterThanOrEqualTo(self.messageView.mas_right).with.offset(2*uexCV_default_margin);
         }
     }];
-    NSInteger status=[data[@"status"] integerValue];
-    if(status == 2){
-        _errorLabel.hidden=NO;
-    }else{
-       _errorLabel.hidden=YES;
-    }
     
+    [[RACObserve(self.data, status) distinctUntilChanged]
+     subscribeNext:^(NSNumber *x) {
+         @strongify(self);
+         uexCV_MessageStatus status = [x integerValue];
+         switch (status) {
+             case uexCV_MessageStatusSending: {
+                 self.errorLabel.hidden=YES;
+                 break;
+             }
+             case uexCV_MessageStatusSent: {
+                 self.errorLabel.hidden=YES;
+                 break;
+             }
+             case uexCV_MessageStatusSentFailed: {
+                 self.errorLabel.hidden=NO;
+                 break;
+             }
 
+         }
+    }];
 
 }
 
 -(void)onErrorLabelClick:(id)sender{
     
-    [self.tableView.superViewController.euexObj callbackJsonWithName:@"onErrorLabelClicked" Object:@{@"timestamp":@(_timestamp)}];
+    [self.tableView.superViewController.euexObj callbackJsonWithName:@"onErrorLabelClicked" Object:@{@"timestamp":@(self.data.timestamp)}];
 }
 
 
