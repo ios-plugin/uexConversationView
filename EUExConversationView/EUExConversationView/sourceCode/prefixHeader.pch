@@ -14,7 +14,7 @@
 #ifdef __OBJC__
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import <MJFresh/MJFresh.h>
+#import <MJRefresh/MJRefresh.h>
 #import "UIColor+uexCV.h"
 #import "EUtility.h"
 #endif

@@ -32,4 +32,10 @@
     //NSLog(@"yy:%f",self.contentOffset.y);
     [super setContentSize:contentSize];
 }
+
+
+
+
+
+
 @end

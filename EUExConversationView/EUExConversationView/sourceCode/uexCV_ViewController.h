@@ -14,11 +14,9 @@
 @class uexCV_TableView;
 @class uexCV_UserInfo;
 @class EUExConversationView;
+@class uexCV_TableViewCellData;
 
-typedef NS_ENUM(NSInteger, uexConversationViewAddDataType) {
-    uexConversationViewAddDataNewMessage,
-    uexConversationViewAddDataMessageHistory
-};
+
 
 
 typedef void (^pullRefreshBlock)();
@@ -33,6 +31,8 @@ typedef void (^pullRefreshBlock)();
 @property(nonatomic,strong)uexCV_TableView * tableView;
 @property(nonatomic,strong)AVAudioPlayer * player;
 @property(nonatomic,strong)NSIndexPath * currentPlayingIndex;
+@property(nonatomic,strong) NSMutableArray<uexCV_TableViewCellData *> * cellData;
+
 
 @property(nonatomic,assign)CGFloat keyboardOffsetY;
 -(instancetype)initWithFrame:(CGRect)frame
@@ -43,10 +43,12 @@ typedef void (^pullRefreshBlock)();
                      euexObj:(EUExConversationView *)euexObj;
 
 
--(void)addData:(NSArray*)data type:(uexConversationViewAddDataType)type;
+-(void)addData:(NSArray*)data;
 
 
--(void)changeErrorLabel:(BOOL)isHidden byTimestamp:(long long)ts;
+
 -(void)deleteMessageByTimestamp:(long long)ts;
--(void)stopPlaying:(BOOL)continually;
+
+
+-(void)stopPlaying;
 @end

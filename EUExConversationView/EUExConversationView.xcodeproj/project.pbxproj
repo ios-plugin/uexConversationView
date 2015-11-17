@@ -20,6 +20,14 @@
 		421D76131BA80A3B00659BF8 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 421D76121BA80A3B00659BF8 /* AudioToolbox.framework */; };
 		421D76171BA80A4600659BF8 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 421D76161BA80A4600659BF8 /* AVFoundation.framework */; };
 		421D76181BA80A5900659BF8 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 421D76101BA80A1D00659BF8 /* QuartzCore.framework */; };
+		426901181BFB384900C877FE /* FDTemplateLayoutCell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 426901171BFB384900C877FE /* FDTemplateLayoutCell.framework */; };
+		4269011B1BFB3F5400C877FE /* MJRefresh.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 42F927CB1BF9DEFE0073B601 /* MJRefresh.framework */; };
+		4269011C1BFB3F5700C877FE /* YYImage.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 42F927C81BF9DDF10073B601 /* YYImage.framework */; };
+		4269011D1BFB3F5900C877FE /* WebP.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 42F927C71BF9DDF10073B601 /* WebP.framework */; };
+		4269011E1BFB3F5C00C877FE /* ReactiveCocoa.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 42F927C51BF9DDEB0073B601 /* ReactiveCocoa.framework */; };
+		4269011F1BFB3F5F00C877FE /* Masonry.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 42F927C31BF9DDE50073B601 /* Masonry.framework */; };
+		426901201BFB3F6200C877FE /* FDTemplateLayoutCell.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 426901171BFB384900C877FE /* FDTemplateLayoutCell.framework */; };
+		426901221BFB3F8400C877FE /* MJRefresh.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 426901211BFB3F7E00C877FE /* MJRefresh.bundle */; };
 		4289E0EB1BAD147600ED552F /* uexCV_Bubble.m in Sources */ = {isa = PBXBuildFile; fileRef = 4289E0EA1BAD147600ED552F /* uexCV_Bubble.m */; };
 		4289E0EE1BAD274600ED552F /* UIColor+uexCV.m in Sources */ = {isa = PBXBuildFile; fileRef = 4289E0ED1BAD274600ED552F /* UIColor+uexCV.m */; };
 		4289E0F61BAD31BF00ED552F /* voice1.png in Resources */ = {isa = PBXBuildFile; fileRef = 4289E0F21BAD31BF00ED552F /* voice1.png */; };
@@ -31,7 +39,6 @@
 		42C669611BA9710E000DBD37 /* libopencore-amrwb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C6695C1BA9710E000DBD37 /* libopencore-amrwb.a */; };
 		42C669621BA9710E000DBD37 /* RecordAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C6695E1BA9710E000DBD37 /* RecordAudio.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		42F927941BF9C6F60073B601 /* uexCV_TableViewCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F927931BF9C6F60073B601 /* uexCV_TableViewCellData.m */; };
-		42F927C21BF9DD4A0073B601 /* FDTemplateLayoutCell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F927C11BF9DD4A0073B601 /* FDTemplateLayoutCell.framework */; };
 		42F927C41BF9DDE50073B601 /* Masonry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F927C31BF9DDE50073B601 /* Masonry.framework */; };
 		42F927C61BF9DDEB0073B601 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F927C51BF9DDEB0073B601 /* ReactiveCocoa.framework */; };
 		42F927C91BF9DDF10073B601 /* WebP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F927C71BF9DDF10073B601 /* WebP.framework */; };
@@ -56,6 +63,13 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
+				426901221BFB3F8400C877FE /* MJRefresh.bundle in CopyFiles */,
+				426901201BFB3F6200C877FE /* FDTemplateLayoutCell.framework in CopyFiles */,
+				4269011F1BFB3F5F00C877FE /* Masonry.framework in CopyFiles */,
+				4269011E1BFB3F5C00C877FE /* ReactiveCocoa.framework in CopyFiles */,
+				4269011D1BFB3F5900C877FE /* WebP.framework in CopyFiles */,
+				4269011C1BFB3F5700C877FE /* YYImage.framework in CopyFiles */,
+				4269011B1BFB3F5400C877FE /* MJRefresh.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,6 +113,8 @@
 		421D76121BA80A3B00659BF8 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		421D76141BA80A4000659BF8 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		421D76161BA80A4600659BF8 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		426901171BFB384900C877FE /* FDTemplateLayoutCell.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FDTemplateLayoutCell.framework; sourceTree = "<group>"; };
+		426901211BFB3F7E00C877FE /* MJRefresh.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MJRefresh.bundle; sourceTree = "<group>"; };
 		4289E0E91BAD147600ED552F /* uexCV_Bubble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uexCV_Bubble.h; sourceTree = "<group>"; };
 		4289E0EA1BAD147600ED552F /* uexCV_Bubble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = uexCV_Bubble.m; sourceTree = "<group>"; };
 		4289E0EC1BAD274600ED552F /* UIColor+uexCV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+uexCV.h"; sourceTree = "<group>"; };
@@ -119,7 +135,6 @@
 		42C6695E1BA9710E000DBD37 /* RecordAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordAudio.m; sourceTree = "<group>"; };
 		42F927921BF9C6F60073B601 /* uexCV_TableViewCellData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uexCV_TableViewCellData.h; sourceTree = "<group>"; };
 		42F927931BF9C6F60073B601 /* uexCV_TableViewCellData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = uexCV_TableViewCellData.m; sourceTree = "<group>"; };
-		42F927C11BF9DD4A0073B601 /* FDTemplateLayoutCell.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FDTemplateLayoutCell.framework; sourceTree = "<group>"; };
 		42F927C31BF9DDE50073B601 /* Masonry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Masonry.framework; sourceTree = "<group>"; };
 		42F927C51BF9DDEB0073B601 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ReactiveCocoa.framework; sourceTree = "<group>"; };
 		42F927C71BF9DDF10073B601 /* WebP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WebP.framework; sourceTree = "<group>"; };
@@ -135,6 +150,7 @@
 				42F927C91BF9DDF10073B601 /* WebP.framework in Frameworks */,
 				421D76181BA80A5900659BF8 /* QuartzCore.framework in Frameworks */,
 				42C669611BA9710E000DBD37 /* libopencore-amrwb.a in Frameworks */,
+				426901181BFB384900C877FE /* FDTemplateLayoutCell.framework in Frameworks */,
 				42C669601BA9710E000DBD37 /* libopencore-amrnb.a in Frameworks */,
 				421D76171BA80A4600659BF8 /* AVFoundation.framework in Frameworks */,
 				421D76131BA80A3B00659BF8 /* AudioToolbox.framework in Frameworks */,
@@ -142,7 +158,6 @@
 				42F927CA1BF9DDF10073B601 /* YYImage.framework in Frameworks */,
 				42F927C41BF9DDE50073B601 /* Masonry.framework in Frameworks */,
 				42F927C61BF9DDEB0073B601 /* ReactiveCocoa.framework in Frameworks */,
-				42F927C21BF9DD4A0073B601 /* FDTemplateLayoutCell.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -204,12 +219,13 @@
 		4201D71F1BA69299007D6036 /* sourceCode */ = {
 			isa = PBXGroup;
 			children = (
+				426901211BFB3F7E00C877FE /* MJRefresh.bundle */,
 				42F927CB1BF9DEFE0073B601 /* MJRefresh.framework */,
 				42F927C71BF9DDF10073B601 /* WebP.framework */,
 				42F927C81BF9DDF10073B601 /* YYImage.framework */,
 				42F927C51BF9DDEB0073B601 /* ReactiveCocoa.framework */,
 				42F927C31BF9DDE50073B601 /* Masonry.framework */,
-				42F927C11BF9DD4A0073B601 /* FDTemplateLayoutCell.framework */,
+				426901171BFB384900C877FE /* FDTemplateLayoutCell.framework */,
 				421D76001BA7F88700659BF8 /* uexCV_TableView */,
 				42C669501BA9710E000DBD37 /* arm */,
 				421D75C51BA7C53900659BF8 /* uexCV_ViewController.h */,

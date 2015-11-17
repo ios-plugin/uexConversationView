@@ -86,15 +86,15 @@
         return;
     }
    
-    uexConversationViewAddDataType type=uexConversationViewAddDataNewMessage;
+    //uexConversationViewAddDataType type=uexConversationViewAddDataNewMessage;
     if([info[@"type"] integerValue]==2){
-        type = uexConversationViewAddDataMessageHistory;
+       //type = uexConversationViewAddDataMessageHistory;
     }
     NSArray *msgs=nil;
     if([info objectForKey:@"messages"]&&[info[@"messages"] isKindOfClass:[NSArray class]]){
         msgs=info[@"messages"];
     }
-    [self.vc addData:msgs type:type];
+    [self.vc addData:msgs];
 }
 
 
@@ -113,16 +113,18 @@
     if(!info || ![info isKindOfClass:[NSDictionary class]]){
         return;
     }
+    if(![info objectForKey:@"status"]){
+        return;
+    }
+    
+    
     long long ts=[info[@"timestamp"] longLongValue];
-    if([info objectForKey:@"status"]&&[[info objectForKey:@"status"] integerValue]==2){
-        [self.vc changeErrorLabel:NO byTimestamp:ts];
+    for (uexCV_TableViewCellData *aCellData in self.vc.cellData) {
+        if (aCellData.timestamp==ts) {
+            aCellData.status=[[info objectForKey:@"status"] integerValue];
+        }
     }
-    if([info objectForKey:@"status"]&&[[info objectForKey:@"status"] integerValue]==1){
-        [self.vc changeErrorLabel:YES byTimestamp:ts];
-    }
-    if([info objectForKey:@"status"]&&[[info objectForKey:@"status"] integerValue]==0){
-        [self.vc changeErrorLabel:YES byTimestamp:ts];
-    }
+
 }
 
 
@@ -140,7 +142,9 @@
 
 
 -(void)stopPlaying:(NSMutableArray *)inArguments{
-    [self.vc stopPlaying:NO];
+    for (uexCV_TableViewCellData *aCellData in self.vc.cellData) {
+        aCellData.isPlaying=NO;
+    }
 }
 
 #pragma mark - Private Methods

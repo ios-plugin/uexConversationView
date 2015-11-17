@@ -24,13 +24,14 @@
 
 #import <Foundation/Foundation.h>
 @class uexCV_UserInfo;
+@class uexCV_ViewController;
 
-typedef void (^clickBlock)();
+typedef BOOL (^clickBlock)();
 
 typedef NS_ENUM(NSInteger,uexCV_MessageStatus) {
     uexCV_MessageStatusSending,
     uexCV_MessageStatusSent,
-    uexCV_MessageStatusSentFailed,
+    uexCV_MessageStatusSendFailed,
 };
 typedef NS_ENUM(NSInteger,uexCV_MessageAttribution) {
     uexCV_MessageAttributionSentMessage,
@@ -48,6 +49,7 @@ typedef NS_ENUM(NSInteger,uexCV_MessageType){
 @property (nonatomic,assign)long long timestamp;
 @property (nonatomic,strong)NSString *data;
 
+@property (nonatomic,assign)CGFloat height;
 
 //textCell
 @property (nonatomic,assign)CGFloat maxTextWidth;
@@ -56,7 +58,10 @@ typedef NS_ENUM(NSInteger,uexCV_MessageType){
 //voiceCell
 @property (nonatomic,assign)BOOL isPlaying;
 @property (nonatomic,assign)NSTimeInterval duration;
-@property (nonatomic,strong)clickBlock onClick;
+@property (nonatomic,strong)clickBlock onClickAction;
+
+
+-(instancetype)initWithDataDictionary:(NSDictionary *)data viewController:(uexCV_ViewController *)vc;
 
 @end
 

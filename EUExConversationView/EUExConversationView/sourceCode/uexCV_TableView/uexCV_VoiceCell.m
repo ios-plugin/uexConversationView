@@ -14,10 +14,11 @@
 #define uexCV_duration_view_radius 10
 #define uexCV_duration_view_bgColor [UIColor whiteColor]
 
-
+#import <YYImage/YYImage.h>
 
 @interface uexCV_VoiceCell()
-
+@property (nonatomic,strong)YYAnimatedImageView *animateHornView;
+@property (nonatomic,strong)UIImageView *staticHornView;
 @end
 
 @implementation uexCV_VoiceCell
@@ -32,40 +33,74 @@
 
 -(void)modifiedCellWithMessageData:(uexCV_TableViewCellData *)data{
     [super modifiedCellWithMessageData:data];
-    @weakify(self);
+    
        
     //horn
-
-    self.hornViews =[NSMutableArray array];
+    NSMutableArray *imagePaths=[NSMutableArray array];
+    for (int i = 0;i<4;i++) {
+        [imagePaths addObject:[[EUtility bundleForPlugin:@"uexConversationView"] pathForResource:[NSString stringWithFormat:@"voice%d",(i+1)] ofType:@"png"]];
+    }
+    
+    
+    
+    
+    
+    YYFrameImage *animateHornImage =[[YYFrameImage alloc]initWithImagePaths:imagePaths oneFrameDuration:0.3 loopCount:0];
+    YYAnimatedImageView *animateHornView = [[YYAnimatedImageView alloc]initWithImage:animateHornImage];
+    [animateHornView setFrame:CGRectMake(0, 0, uexCV_horn_height, uexCV_horn_height)];
+    [animateHornView setContentMode:UIViewContentModeScaleToFill];
+    self.animateHornView=animateHornView;
+    
+    UIImage *staticHornImage = [[UIImage alloc] initWithContentsOfFile:[[EUtility bundleForPlugin:@"uexConversationView"] pathForResource:@"voice4" ofType:@"png"]];
+    
+    UIImageView *staticHornView =[[UIImageView alloc]initWithImage:staticHornImage];
+    [staticHornView setFrame:CGRectMake(0, 0, uexCV_horn_height, uexCV_horn_height)];
+    [staticHornView setContentMode:UIViewContentModeScaleToFill];
+    self.staticHornView=staticHornView;
+    
     self.horn=[[UIImageView alloc]init];
     [self.horn setContentMode:UIViewContentModeLeft];
     self.horn.userInteractionEnabled=YES;
-    //UITapGestureRecognizer *tapGes=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onClick:)];
-    
+    [self.horn addSubview:self.animateHornView];
+    [self.horn addSubview:self.staticHornView];
+
     UITapGestureRecognizer *tgr=[[UITapGestureRecognizer alloc] init];
-    [[tgr.rac_gestureSignal takeUntil:self.rac_prepareForReuseSignal]subscribeNext:^(id x) {
-#warning TODO
+    [[tgr.rac_gestureSignal takeUntil:self.rac_prepareForReuseSignal] subscribeNext:^(id x) {
+        self.data.isPlaying=!self.data.isPlaying;
     }];
-    [self.horn addGestureRecognizer:tapGes];
-    for(int i = 0;i<4;i++){
-        UIImage *hornImg=[UIImage imageWithContentsOfFile:[[EUtility bundleForPlugin:@"uexConversationView"] pathForResource:[NSString stringWithFormat:@"voice%d",(i+1)] ofType:@"png"]];
-        UIImageView * hornView =[[UIImageView alloc]initWithImage:hornImg];
-        [hornView setFrame:CGRectMake(0, 0, uexCV_horn_height, uexCV_horn_height)];
-        [hornView setContentMode:UIViewContentModeScaleToFill];
+    [self.horn addGestureRecognizer:tgr];
+    @weakify(self);
+    [[RACObserve(self.data, isPlaying) distinctUntilChanged]
+     subscribeNext:^(id x) {
+        //@strongify(self.data);
+        BOOL isPlaying = [x boolValue];
+        if(isPlaying){
+            if(self.data.onClickAction){
+                BOOL tryToPlay= self.data.onClickAction();
+                if(tryToPlay){
+                    [self startPlayingWorkWithTimestamp:self.data.timestamp];
 
-        [self.hornViews addObject:hornView];
-
-    }
+                }else{
+                    self.data.isPlaying=NO;
+                }
+            }
+        }else{
+            [self stopPlayingWork];
+        }
+    }];
     
-    self.isPlaying=NO;
-    [self showHorn:uexCV_hornView_status_4];
+    
+
+    
+
+
     [self.horn setContentMode:UIViewContentModeLeft];
     [self.messageView addSubview:self.horn];
     [_horn mas_updateConstraints:^(MASConstraintMaker *make) {
         @strongify(self);
         make.height.equalTo(@(uexCV_horn_height));
         make.edges.equalTo(self.messageView).with.insets(uexCV_inner_padding);
-        make.width.equalTo(uexCV_cell_container.mas_width).multipliedBy([self widthMultipier:self.duration]);
+        make.width.equalTo(uexCV_cell_container.mas_width).multipliedBy([self widthMultipier:self.data.duration]);
     }];
     
     
@@ -75,7 +110,7 @@
     _durationView.layer.cornerRadius=uexCV_duration_view_radius;
     _durationView.backgroundColor=uexCV_duration_view_bgColor;
     _durationView.textAlignment=NSTextAlignmentCenter;
-    [_durationView setText:[NSString stringWithFormat:@"%ld\"",(long)self.duration]];
+    [_durationView setText:[NSString stringWithFormat:@"%ld\"",(long)self.data.duration]];
     
     [_durationView setTextColor:uexCV_default_label_color];
     [_durationView setFont:[UIFont systemFontOfSize:uexCV_default_label_size]];
@@ -103,48 +138,33 @@
             make.left.greaterThanOrEqualTo(self.durationView.mas_right).with.offset(2*uexCV_default_margin);
         }
     }];
+    //[self setNeedsLayout];
+    //[self layoutIfNeeded];
+}
+
+-(void)notifyStartPlaying{
     
 }
 
--(void)stopPlaying{
-    if(self.isPlaying){
-
-        self.isPlaying=NO;
-    }
-    
-
-
-
-
-    
-    
-}
-
--(void)onClick:(id)sender{
-    if(self.data.onClick){
-
-        [self.tableView.superViewController stopPlaying:YES];
-
-        if(self.tableView.superViewController.currentPlayingIndex ==self.inCellIndex){
-            self.tableView.superViewController.currentPlayingIndex=nil;
-            
-            return;
+-(void)startPlayingWorkWithTimestamp:(long long)ts{
+    for (uexCV_TableViewCellData *aCellData in self.tableView.superViewController.cellData) {
+        if(aCellData.timestamp != ts){
+            aCellData.isPlaying = NO;
         }
-        self.data.onClick();
-        self.tableView.superViewController.currentPlayingIndex=self.inCellIndex;
-
-        self.isPlaying=YES;
-        
-        [self cyc];
-        
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.duration*1000 * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
-            self.isPlaying=NO;
-            
-        });
-
-
-        
     }
+    self.animateHornView.hidden=NO;
+    self.staticHornView.hidden=YES;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.data.duration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.data.isPlaying=NO;
+    });
+}
+
+
+
+-(void)stopPlayingWork{
+    [self.tableView.superViewController stopPlaying];
+    self.animateHornView.hidden=YES;
+    self.staticHornView.hidden=NO;
 }
 
 
@@ -162,65 +182,5 @@
 
 
 
-#pragma mark - horn animation
-
--(void)cyc{
-    
-    if(self.isPlaying){
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(300 * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
-            [self next];
-            
-            [self.tableView reloadRoselfAtIndexPaths:@[self.inCellIndex] withRowAnimation:UITableViewRowAnimationNone];
-            [self cyc];
-            
-            
-            
-        });
-    }else{
-        [self showHorn:uexCV_hornView_status_4];
-    }
-}
-
--(void)next{
-    switch (self.hornStatus) {
-        case uexCV_hornView_status_1: {
-            [self hideHorn:uexCV_hornView_status_1];
-            [self showHorn:uexCV_hornView_status_2];
-            break;
-        }
-        case uexCV_hornView_status_2: {
-            [self hideHorn:uexCV_hornView_status_2];
-            [self showHorn:uexCV_hornView_status_3];
-            break;
-        }
-        case uexCV_hornView_status_3: {
-            [self hideHorn:uexCV_hornView_status_3];
-            [self showHorn:uexCV_hornView_status_4];
-            break;
-        }
-        case uexCV_hornView_status_4: {
-            [self hideHorn:uexCV_hornView_status_4];
-            [self showHorn:uexCV_hornView_status_1];
-            break;
-        }
-        default: {
-            break;
-        }
-    }
-}
-
-
--(void)hideHorn:(uexCV_hornView_status)status{
-    UIImageView * hornView = ((UIImageView *)self.hornVieself[status]);
-    [hornView removeFromSuperview];
-}
--(void)showHorn:(uexCV_hornView_status)status{
-
-    UIImageView * hornView = ((UIImageView *)self.hornVieself[status]);
-    [_horn addSubview:hornView];
-
-    self.hornStatus=status;
-    //NSLog(@"%ld",self.hornStatus);
-}
 
 @end

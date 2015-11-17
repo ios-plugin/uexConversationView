@@ -18,6 +18,9 @@
 #define uexCV_photo_cornor_radius 3
 
 #define uexCV_error_label_size 30
+
+
+#define baseView self.contentView
 @implementation uexCV_TableViewCell
 
 - (void)awakeFromNib {
@@ -47,18 +50,30 @@
 
 
 
+
+
+
 -(void)modifiedCellWithMessageData:(uexCV_TableViewCellData *)data{
     self.data=data;
+    if(self.containerView){
+        [self.containerView removeFromSuperview];
+    }
     self.containerView =[[UIView alloc]init];
     self.containerView.userInteractionEnabled=YES;
     [self.contentView addSubview:self.containerView];
     self.containerView.translatesAutoresizingMaskIntoConstraints=NO;
-    [self.containerView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView.mas_top);
-        make.left.equalTo(self.contentView.mas_left);
-        make.right.equalTo(self.contentView.mas_right);
-    }];
+    baseView.translatesAutoresizingMaskIntoConstraints=NO;
+    //self.translatesAutoresizingMaskIntoConstraints=NO;
     @weakify(self);
+    
+    [self.containerView mas_updateConstraints:^(MASConstraintMaker *make) {
+        @strongify(self);
+        make.edges.equalTo(baseView);
+    }];
+    [baseView mas_updateConstraints:^(MASConstraintMaker *make) {
+        @strongify(self);
+        make.edges.equalTo(self);
+    }];
     
     
     
@@ -188,7 +203,7 @@
                  self.errorLabel.hidden=YES;
                  break;
              }
-             case uexCV_MessageStatusSentFailed: {
+             case uexCV_MessageStatusSendFailed: {
                  self.errorLabel.hidden=NO;
                  break;
              }

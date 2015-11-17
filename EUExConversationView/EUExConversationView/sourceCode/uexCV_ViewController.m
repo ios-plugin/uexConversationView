@@ -13,8 +13,8 @@
 
 #import "EUExConversationView.h"
 #import "amrFileCodec.h"
-
-
+#import "uexCV_TableViewCellData.h"
+#import <FDTemplateLayoutCell/FDTemplateLayoutCell.h>
 
 NSString  * const uexCV_text_cell_identifier = @"uexCV_text_cell";
 NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
@@ -22,7 +22,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
 @interface uexCV_ViewController ()<UITableViewDataSource,UITableViewDelegate,AVAudioPlayerDelegate>
 
 
-@property(nonatomic,strong) NSMutableArray * cells;
+
 @property(nonatomic,strong) UIImage * bgImage;
 @property(nonatomic,assign) BOOL isRefreshing;
 
@@ -31,26 +31,19 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
 @end
 
 @implementation uexCV_ViewController
--(void)changeErrorLabel:(BOOL)isHidden byTimestamp:(long long)ts{
-    for(uexCV_TableViewCell *cell in self.cells){
-        if(cell.timestamp==ts){
-            cell.errorLabel.hidden=isHidden;
-        }
-    }
-    [self.tableView reloadData];
-}
+
 
 -(void)deleteMessageByTimestamp:(long long)ts{
     NSMutableArray *tmp=[NSMutableArray array];
-    for(uexCV_TableViewCell *cell in self.cells){
-        if(cell.timestamp==ts){
-            [tmp addObject:cell];
+    for(uexCV_TableViewCellData *aCellData in self.cellData){
+        if(aCellData.timestamp==ts){
+            [tmp addObject:aCellData];
         }
     }
-    for(uexCV_TableViewCell *cell in tmp){
-        [self.cells removeObject:cell];
+    for(uexCV_TableViewCellData *aCellData in tmp){
+        [self.cellData removeObject:aCellData];
     }
-    [self.tableView reloadData];
+    [self reloadTableView];
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -61,7 +54,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
                      euexObj:(EUExConversationView *)euexObj{
     self=[super init];
     if(self){
-        self.cells=[NSMutableArray array];
+        self.cellData=[NSMutableArray array];
         self.frame=frame;
         self.bgImage=bgImg;
         self.meInfo=me;
@@ -69,7 +62,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
         self.extras=extras;
         self.euexObj=euexObj;
         self.keyboardOffsetY=0;
-        [self initPlayer];
+        [self setupPlayerConfig];
         
     }
     return self;
@@ -87,8 +80,9 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
     self.tableView.delegate=self;
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     self.tableView.allowsSelection=NO;
-    //self.tableView.estimatedRowHeight = 40;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
+    [self.tableView registerClass:[uexCV_TextCell class] forCellReuseIdentifier:uexCV_text_cell_identifier];
+    [self.tableView registerClass:[uexCV_VoiceCell class] forCellReuseIdentifier:uexCV_voice_cell_identifier];
     /*
         self.tableView.header=[MJRefreshNormalHeader headerWithRefreshingBlock:^{
         self.isRefreshing=YES;
@@ -105,29 +99,32 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
     [self.view addSubview:self.tableView];
 
 }
-
--(void)viewDidDisappear:(BOOL)animated{
-    [self deregisterKeyboardActions];
-}
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
--(void)addData:(NSArray*)data type:(uexConversationViewAddDataType)type{
-    __block CGPoint oldOffset = self.tableView.contentOffset;
-    CGFloat oldHeight = self.tableView.contentSize.height;
-    BOOL isScrollToButtom = NO;
+-(void)addData:(NSArray*)data{
 
     
+    for(int i=0;i<data.count;i++){
+        uexCV_TableViewCellData *aCellData=[self cellDataFromMessageData:data[i]];
+        if(aCellData){
+            [self.cellData addObject:aCellData];
+        }
+        
+    }
+    [self.cellData sortedArrayUsingComparator:^NSComparisonResult(uexCV_TableViewCellData *  _Nonnull obj1, uexCV_TableViewCellData *  _Nonnull obj2) {
+        return (obj1.timestamp > obj2.timestamp);
+    }];
+    [self reloadTableView];
+    /*
     switch (type) {
         case uexConversationViewAddDataNewMessage: {
             for(int i=0;i<data.count;i++){
-                [self.cells addObject:[self cellForMessageData:data[i]]];
+                //[self.cells addObject:[self cellForMessageData:data[i]]];
             }
             CGFloat distanceToBottom=oldHeight-self.frame.size.height-oldOffset.y;
-            //NSLog(@"dis:%f",distanceToBottom);
             if(distanceToBottom<200){
                 
                 isScrollToButtom=YES;
@@ -169,10 +166,32 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
             
     }
     
-
+     */
 
 
 }
+
+
+
+-(void)reloadTableView{
+    CGPoint currentOffset = self.tableView.contentOffset;
+    CGFloat currentHeight = self.tableView.contentSize.height;
+    CGFloat distanceToBottom=currentHeight-self.tableView.frame.size.height-currentOffset.y;
+    BOOL isScrollToButtom=(distanceToBottom<200);
+    [self.tableView reloadData];
+    if(isScrollToButtom){
+        NSInteger targetRow=self.cellData.count-1;
+        if(targetRow>0){
+            NSIndexPath *indexPath=[NSIndexPath indexPathForRow:targetRow inSection:0];
+            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        }
+        
+    }else{
+        //oldOffset.y =self.tableView.contentSize.height-oldHeight;
+        [self.tableView setContentOffset:currentOffset];
+    }
+}
+
 
 /*
  
@@ -198,12 +217,65 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
 }
 
 -(void)endRefreshing{
-    [self.tableView reloadData];
+    [self reloadTableView];
     //[self.tableView.header endRefreshing];
     self.isRefreshing=NO;
 }
 
 
+
+
+-(uexCV_TableViewCellData *)cellDataFromMessageData:(NSDictionary *)dataDict{
+    if(!dataDict || ![dataDict isKindOfClass:[NSDictionary class]]){
+        return nil;
+    }
+    uexCV_TableViewCellData *cellData = [[uexCV_TableViewCellData alloc]initWithDataDictionary:dataDict viewController:self];
+    if(!cellData){
+        return nil;
+    }
+    switch (cellData.attribution) {
+        case uexCV_MessageAttributionSentMessage: {
+            cellData.info=self.meInfo;
+            break;
+        }
+        case uexCV_MessageAttributionReceivedMessage: {
+            cellData.info=self.youInfo;
+            break;
+        }
+
+    }
+    if(cellData.type == uexCV_MessageTypeVoiceMessage){
+        @weakify(self,cellData);
+        cellData.onClickAction=^(){
+            @strongify(self,cellData);
+            [self stopPlaying];
+            NSError *error = nil;
+            NSData *amrData=[NSData dataWithContentsOfFile:cellData.data];
+            AVAudioPlayer *player=[[AVAudioPlayer alloc]initWithData:DecodeAMRToWAVE(amrData) error:&error];
+            player.delegate=self;
+            self.player=player;
+            BOOL prepareToPlay =[self.player prepareToPlay];
+            if(!error && prepareToPlay){
+
+                return [self.player play];
+            }else{
+                return NO;
+            }
+        };
+        
+    }
+    return cellData;
+}
+-(void)stopPlaying{
+    if(self.player){
+        if (self.player.isPlaying) {
+            [self.player stop];
+        }
+        self.player=nil;
+    }
+
+}
+/*
 -(uexCV_TableViewCell*)cellForMessageData:(NSDictionary *)data{
     
 
@@ -262,27 +334,10 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
     return cell;
 
 }
+*/
 
 
 
--(void)stopPlaying:(BOOL)continually{
-    if(self.player){
-        if([self.player isPlaying]){
-            for(uexCV_TableViewCell *cell in self.cells){
-                if([cell isKindOfClass:[uexCV_VoiceCell class]]){
-                    uexCV_VoiceCell *voiceCell=(uexCV_VoiceCell *)cell;
-                    [voiceCell stopPlaying];
-                }
-            }
-            [self.player stop];
-            if(!continually){
-                self.currentPlayingIndex=nil;
-            }
-            
-        }
-        self.player=nil;
-    }
-}
 /*
 #pragma mark - Navigation
 
@@ -299,7 +354,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 
-    return self.cells.count;
+    return self.cellData.count;
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -307,19 +362,57 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    /*
     uexCV_TableViewCell* cell=(uexCV_TableViewCell*)self.cells[indexPath.row];
     cell.inCellIndex=indexPath;
     return cell;
+     */
+    uexCV_TableViewCellData *aCellData =self.cellData[indexPath.row];
+    switch (aCellData.type) {
+        case uexCV_MessageTypeTextMessage: {
+            uexCV_TextCell *cell =[self.tableView dequeueReusableCellWithIdentifier:uexCV_text_cell_identifier];
+            if(!cell){
+                cell=[[uexCV_TextCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:uexCV_text_cell_identifier];
+            }
+            [cell modifiedCellWithMessageData:aCellData];
+            return cell;
+            break;
+        }
+        case uexCV_MessageTypeVoiceMessage: {
+            uexCV_VoiceCell *cell =[self.tableView dequeueReusableCellWithIdentifier:uexCV_voice_cell_identifier];
+            if(!cell){
+                cell=[[uexCV_VoiceCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:uexCV_voice_cell_identifier];
+            }
+            [cell modifiedCellWithMessageData:aCellData];
+            return cell;
+            break;
+        }
+
+    }
+    
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    uexCV_TableViewCell * cell=(uexCV_TableViewCell*)self.cells[indexPath.row];
-    cell.bounds = CGRectMake(0.0f, 0.0f, CGRectGetWidth(tableView.bounds), CGRectGetHeight(cell.bounds));
     
 
-    [cell setNeedsLayout];
-    [cell layoutIfNeeded];
-    CGFloat height = cell.containerView.frame.size.height+3;
+    uexCV_TableViewCellData *aCellData =self.cellData[indexPath.row];
+    CGFloat height;
+    switch (aCellData.type) {
+        case uexCV_MessageTypeTextMessage: {
+            height=[self.tableView fd_heightForCellWithIdentifier:uexCV_text_cell_identifier cacheByIndexPath:indexPath configuration:^(uexCV_TextCell *cell) {
+                [cell modifiedCellWithMessageData:aCellData];
+            }];
+            break;
+        }
+        case uexCV_MessageTypeVoiceMessage: {
+            height =[self.tableView fd_heightForCellWithIdentifier:uexCV_voice_cell_identifier cacheByIndexPath:indexPath configuration:^(uexCV_VoiceCell *cell) {
+                [cell modifiedCellWithMessageData:aCellData];
+            }];
+            break;
+        }
+
+    }
+    //height =height+3;
     return height;
 
 }
@@ -331,7 +424,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
 #pragma mark - AVAudioPlayer 
 
 
--(void)initPlayer{
+-(void)setupPlayerConfig{
     //初始化播放器的时候如下设置
     UInt32 sessionCategory = kAudioSessionCategory_MediaPlayback;
     AudioSessionSetProperty(kAudioSessionProperty_AudioCategory,
@@ -367,36 +460,34 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
 #pragma mark - Keyboard Action
 
 -(void)registerKeyboardActions{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHide:) name:UIKeyboardWillHideNotification object:nil];
-}
+    [[[NSNotificationCenter defaultCenter] rac_addObserverForName:UIKeyboardWillShowNotification object:nil] subscribeNext:^(NSNotification *notif) {
+        CGRect keyBoardRect=[notif.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+        CGFloat deltaY=keyBoardRect.size.height;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [UIView animateWithDuration:[notif.userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue] animations:^{
 
--(void)deregisterKeyboardActions{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-}
+                CGRect tmpFrame=self.frame;
+                tmpFrame.size.height=tmpFrame.size.height-deltaY+self.keyboardOffsetY;
+                self.view.frame=tmpFrame;
+            }];
 
-
--(void)keyboardShow:(NSNotification *)notif
-{
-    CGRect keyBoardRect=[notif.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    CGFloat deltaY=keyBoardRect.size.height;
+        });
+    }];
     
-    [UIView animateWithDuration:[notif.userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue] animations:^{
-        
-        
-        CGRect tmpFrame=self.frame;
-        tmpFrame.size.height=tmpFrame.size.height-deltaY+self.keyboardOffsetY;
-        self.view.frame=tmpFrame;
-        //self.view.transform=CGAffineTransformMakeTranslation(0, -deltaY+self.keyboardOffsetY);
+    [[[NSNotificationCenter defaultCenter] rac_addObserverForName:UIKeyboardWillHideNotification object:nil] subscribeNext:^(NSNotification *notif) {
+        CGRect keyBoardRect=[notif.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+        CGFloat deltaY=keyBoardRect.size.height;        dispatch_async(dispatch_get_main_queue(), ^{
+            [UIView animateWithDuration:[notif.userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue] animations:^{
+                [UIView animateWithDuration:[notif.userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue] animations:^{
+                    self.view.frame=self.frame;
+                }];
+            }];
+            
+        });
     }];
+
 }
--(void)keyboardHide:(NSNotification *)notif
-{
-    [UIView animateWithDuration:[notif.userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue] animations:^{
-        self.view.frame=self.frame;
-    }];
-}
+
 
 
 @end
