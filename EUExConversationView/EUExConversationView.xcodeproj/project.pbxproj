@@ -9,9 +9,6 @@
 /* Begin PBXBuildFile section */
 		4201D6FA1BA68F81007D6036 /* EUExConversationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4201D6F91BA68F81007D6036 /* EUExConversationView.m */; };
 		421D75C71BA7C53900659BF8 /* uexCV_ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 421D75C61BA7C53900659BF8 /* uexCV_ViewController.m */; };
-		421D75CB1BA7CD0B00659BF8 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 421D75CA1BA7CD0B00659BF8 /* Quartz.framework */; };
-		421D75CD1BA7CD1100659BF8 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 421D75CC1BA7CD1100659BF8 /* AVFoundation.framework */; };
-		421D75CF1BA7CD1A00659BF8 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 421D75CE1BA7CD1A00659BF8 /* AudioToolbox.framework */; };
 		421D76071BA7F88700659BF8 /* uexCV_TableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 421D76021BA7F88700659BF8 /* uexCV_TableView.m */; };
 		421D76081BA7F88700659BF8 /* uexCV_TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 421D76041BA7F88700659BF8 /* uexCV_TableViewCell.m */; };
 		421D76091BA7F88700659BF8 /* uexCV_UserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 421D76061BA7F88700659BF8 /* uexCV_UserInfo.m */; };
@@ -94,9 +91,6 @@
 		421D745D1BA7A40300659BF8 /* uexConversationView.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = uexConversationView.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		421D75C51BA7C53900659BF8 /* uexCV_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uexCV_ViewController.h; sourceTree = "<group>"; };
 		421D75C61BA7C53900659BF8 /* uexCV_ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = uexCV_ViewController.m; sourceTree = "<group>"; };
-		421D75CA1BA7CD0B00659BF8 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/System/Library/Frameworks/Quartz.framework; sourceTree = DEVELOPER_DIR; };
-		421D75CC1BA7CD1100659BF8 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
-		421D75CE1BA7CD1A00659BF8 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/System/Library/Frameworks/AudioToolbox.framework; sourceTree = DEVELOPER_DIR; };
 		421D76011BA7F88700659BF8 /* uexCV_TableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uexCV_TableView.h; sourceTree = "<group>"; };
 		421D76021BA7F88700659BF8 /* uexCV_TableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = uexCV_TableView.m; sourceTree = "<group>"; };
 		421D76031BA7F88700659BF8 /* uexCV_TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uexCV_TableViewCell.h; sourceTree = "<group>"; };
@@ -162,9 +156,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				421D75CF1BA7CD1A00659BF8 /* AudioToolbox.framework in Frameworks */,
-				421D75CD1BA7CD1100659BF8 /* AVFoundation.framework in Frameworks */,
-				421D75CB1BA7CD0B00659BF8 /* Quartz.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,9 +264,6 @@
 				421D76141BA80A4000659BF8 /* CoreAudio.framework */,
 				421D76121BA80A3B00659BF8 /* AudioToolbox.framework */,
 				421D76101BA80A1D00659BF8 /* QuartzCore.framework */,
-				421D75CE1BA7CD1A00659BF8 /* AudioToolbox.framework */,
-				421D75CC1BA7CD1100659BF8 /* AVFoundation.framework */,
-				421D75CA1BA7CD0B00659BF8 /* Quartz.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

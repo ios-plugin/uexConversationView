@@ -23,8 +23,8 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
 
 
 
-@property(nonatomic,strong) UIImage * bgImage;
-@property(nonatomic,assign) BOOL isRefreshing;
+@property (nonatomic,strong) UIImage * bgImage;
+@property (nonatomic,assign) BOOL isRefreshing;
 @property (nonatomic,strong)RACDisposable *endRefreshDisposable;
 
 
@@ -506,33 +506,39 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
 #pragma mark - Keyboard Action
 
 -(void)registerKeyboardActions{
+    
     [[[NSNotificationCenter defaultCenter] rac_addObserverForName:UIKeyboardWillShowNotification object:nil] subscribeNext:^(NSNotification *notif) {
         CGRect keyBoardRect=[notif.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
         CGFloat deltaY=keyBoardRect.size.height;
+
         dispatch_async(dispatch_get_main_queue(), ^{
             [UIView animateWithDuration:[notif.userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue] animations:^{
-
+                CGFloat screenHeight=[EUtility screenHeight];
                 CGRect tmpFrame=self.frame;
-                tmpFrame.size.height=tmpFrame.size.height-deltaY+self.keyboardOffsetY;
+                tmpFrame.size.height=screenHeight-tmpFrame.origin.y-self.keyboardOffsetY-deltaY;
+                
                 self.view.frame=tmpFrame;
+                self.tableView.frame=CGRectMake(0, 0, self.view.frame.size.width,self.view.frame.size.height);
+                [self.tableView scrollRectToVisible:CGRectMake(0, self.tableView.contentSize.height-1, 1, 1) animated:YES];
             }];
+
 
         });
     }];
     
     [[[NSNotificationCenter defaultCenter] rac_addObserverForName:UIKeyboardWillHideNotification object:nil] subscribeNext:^(NSNotification *notif) {
-        CGRect keyBoardRect=[notif.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-        CGFloat deltaY=keyBoardRect.size.height;
         dispatch_async(dispatch_get_main_queue(), ^{
             [UIView animateWithDuration:[notif.userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue] animations:^{
 
                 self.view.frame=self.frame;
+                self.tableView.frame=CGRectMake(0, 0, self.view.frame.size.width,self.view.frame.size.height);
+                [self.tableView scrollRectToVisible:CGRectMake(0, self.tableView.contentSize.height-1, 1, 1) animated:YES];
                
             }];
-    
+
         });
     }];
-
+    
 }
 
 
