@@ -86,7 +86,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
     
     self.tableView.mj_header=[MJRefreshNormalHeader headerWithRefreshingBlock:^{
         self.isRefreshing=YES;
-        NSLog(@"1");
+
         RACSubject *delayedEndRefreshingSubject=[RACSubject subject];
         [[RACScheduler mainThreadScheduler] afterDelay:3 schedule:^{
             [delayedEndRefreshingSubject sendCompleted];
@@ -115,7 +115,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
                 break;
             }
             case MJRefreshStateRefreshing:{
-                NSLog(@"2");
+
                 [self headerRefreshStatusDidChange:@2];
                 break;
             }
@@ -522,13 +522,14 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
     
     [[[NSNotificationCenter defaultCenter] rac_addObserverForName:UIKeyboardWillHideNotification object:nil] subscribeNext:^(NSNotification *notif) {
         CGRect keyBoardRect=[notif.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-        CGFloat deltaY=keyBoardRect.size.height;        dispatch_async(dispatch_get_main_queue(), ^{
+        CGFloat deltaY=keyBoardRect.size.height;
+        dispatch_async(dispatch_get_main_queue(), ^{
             [UIView animateWithDuration:[notif.userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue] animations:^{
-                [UIView animateWithDuration:[notif.userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue] animations:^{
-                    self.view.frame=self.frame;
-                }];
+
+                self.view.frame=self.frame;
+               
             }];
-            
+    
         });
     }];
 
