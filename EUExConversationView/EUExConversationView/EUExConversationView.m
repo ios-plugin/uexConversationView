@@ -141,7 +141,18 @@
 }
 
 
+-(void)endRefreshing:(NSMutableArray *)inArguments{
+    if([inArguments count] < 1){
+        return;
+    }
+    NSInteger type =[inArguments[0] integerValue];
+    if(type == 1){
+        [self.vc endRefreshing];
+    }
+}
+
 -(void)stopPlaying:(NSMutableArray *)inArguments{
+    [self.vc stopPlaying];
     for (uexCV_TableViewCellData *aCellData in self.vc.cellData) {
         aCellData.isPlaying=NO;
     }

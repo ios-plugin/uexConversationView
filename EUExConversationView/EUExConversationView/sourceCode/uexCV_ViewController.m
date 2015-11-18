@@ -25,7 +25,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
 
 @property(nonatomic,strong) UIImage * bgImage;
 @property(nonatomic,assign) BOOL isRefreshing;
-
+@property (nonatomic,strong)RACDisposable *endRefreshDisposable;
 
 
 @end
@@ -80,25 +80,61 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
     self.tableView.delegate=self;
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     self.tableView.allowsSelection=NO;
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    //self.tableView.rowHeight = UITableViewAutomaticDimension;
     [self.tableView registerClass:[uexCV_TextCell class] forCellReuseIdentifier:uexCV_text_cell_identifier];
     [self.tableView registerClass:[uexCV_VoiceCell class] forCellReuseIdentifier:uexCV_voice_cell_identifier];
-    /*
-        self.tableView.header=[MJRefreshNormalHeader headerWithRefreshingBlock:^{
+    
+    self.tableView.mj_header=[MJRefreshNormalHeader headerWithRefreshingBlock:^{
         self.isRefreshing=YES;
-        if(self.loadHistoryBlock){
-            self.loadHistoryBlock();
-        }
-
-        [self delayedEndRefreshing:3000];
-
+        NSLog(@"1");
+        RACSubject *delayedEndRefreshingSubject=[RACSubject subject];
+        [[RACScheduler mainThreadScheduler] afterDelay:3 schedule:^{
+            [delayedEndRefreshingSubject sendCompleted];
+        }];
+        @weakify(self);
+        self.endRefreshDisposable =[delayedEndRefreshingSubject subscribeCompleted:^{
+            @strongify(self);
+            [self endRefreshing];
+        }];
     }];
-    
-    */
-    
+    @weakify(self);
+    [RACObserve(self.tableView.mj_header, state) subscribeNext:^(id x) {
+        @strongify(self);
+        MJRefreshState state =(MJRefreshState)[x integerValue];
+        switch (state) {
+            case MJRefreshStateIdle:{
+                [self headerRefreshStatusDidChange:@0];
+                break;
+            }
+            case MJRefreshStatePulling:{
+                [self headerRefreshStatusDidChange:@1];
+                break;
+            }
+            case MJRefreshStateNoMoreData:{
+                NSLog(@"no more data");
+                break;
+            }
+            case MJRefreshStateRefreshing:{
+                NSLog(@"2");
+                [self headerRefreshStatusDidChange:@2];
+                break;
+            }
+            case MJRefreshStateWillRefresh:{
+                NSLog(@"willrefresh");
+                break;
+            }
+
+        }
+    }];
     [self.view addSubview:self.tableView];
+}
+
+-(void)headerRefreshStatusDidChange:(NSNumber *)status{
+    [self.euexObj callbackJsonWithName:@"onRefreshStatusChange" Object:@{@"type":@1,@"status":status}];
 
 }
+
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -114,9 +150,10 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
         }
         
     }
-    [self.cellData sortedArrayUsingComparator:^NSComparisonResult(uexCV_TableViewCellData *  _Nonnull obj1, uexCV_TableViewCellData *  _Nonnull obj2) {
-        return (obj1.timestamp > obj2.timestamp);
+    [self.cellData sortUsingComparator:^NSComparisonResult(uexCV_TableViewCellData *  _Nonnull obj1, uexCV_TableViewCellData *  _Nonnull obj2) {
+        return obj1.timestamp>obj2.timestamp;
     }];
+    
     [self reloadTableView];
     /*
     switch (type) {
@@ -207,19 +244,20 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
 
 
 
--(void)delayedEndRefreshing:(NSInteger)msec{
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(msec * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
-        if(self.isRefreshing){
-            [self endRefreshing];
-            
-        }
-    });
-}
+
 
 -(void)endRefreshing{
+    if(!self.isRefreshing){
+        return;
+    }
     [self reloadTableView];
-    //[self.tableView.header endRefreshing];
+    [self.tableView.mj_header endRefreshing];
     self.isRefreshing=NO;
+    if(self.endRefreshDisposable){
+        [self.endRefreshDisposable dispose];
+        self.endRefreshDisposable=nil;
+    }
+    
 }
 
 
@@ -257,8 +295,12 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
             BOOL prepareToPlay =[self.player prepareToPlay];
             if(!error && prepareToPlay){
 
-                return [self.player play];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(50 * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
+                    [self.player play];
+                });
+                return YES;
             }else{
+
                 return NO;
             }
         };
@@ -267,6 +309,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
     return cellData;
 }
 -(void)stopPlaying{
+    
     if(self.player){
         if (self.player.isPlaying) {
             [self.player stop];
@@ -374,6 +417,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
             if(!cell){
                 cell=[[uexCV_TextCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:uexCV_text_cell_identifier];
             }
+            cell.tableView=self.tableView;
             [cell modifiedCellWithMessageData:aCellData];
             return cell;
             break;
@@ -383,6 +427,7 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
             if(!cell){
                 cell=[[uexCV_VoiceCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:uexCV_voice_cell_identifier];
             }
+            cell.tableView=self.tableView;
             [cell modifiedCellWithMessageData:aCellData];
             return cell;
             break;
@@ -400,12 +445,14 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
     switch (aCellData.type) {
         case uexCV_MessageTypeTextMessage: {
             height=[self.tableView fd_heightForCellWithIdentifier:uexCV_text_cell_identifier cacheByIndexPath:indexPath configuration:^(uexCV_TextCell *cell) {
+                cell.tableView=self.tableView;
                 [cell modifiedCellWithMessageData:aCellData];
             }];
             break;
         }
         case uexCV_MessageTypeVoiceMessage: {
             height =[self.tableView fd_heightForCellWithIdentifier:uexCV_voice_cell_identifier cacheByIndexPath:indexPath configuration:^(uexCV_VoiceCell *cell) {
+                cell.tableView=self.tableView;
                 [cell modifiedCellWithMessageData:aCellData];
             }];
             break;
@@ -440,7 +487,6 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
     //默认情况下扬声器播放
     [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
     [audioSession setActive:YES error:nil];
-    audioSession = nil;
 }
 
 
@@ -448,14 +494,14 @@ NSString  * const uexCV_voice_cell_identifier = @"uexCV_voice_cell";
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag{
     [self.player stop];
     self.player=nil;
-    self.currentPlayingIndex=nil;
+
 }
 
 /* if an error occurs while decoding it will be reported to the delegate. */
 - (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError *)error{
     [self.player stop];
     self.player=nil;
-    self.currentPlayingIndex=nil;
+
 }
 #pragma mark - Keyboard Action
 

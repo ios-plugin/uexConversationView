@@ -19,6 +19,7 @@
 @interface uexCV_VoiceCell()
 @property (nonatomic,strong)YYAnimatedImageView *animateHornView;
 @property (nonatomic,strong)UIImageView *staticHornView;
+@property (nonatomic,strong)UITapGestureRecognizer *tgr;
 @end
 
 @implementation uexCV_VoiceCell
@@ -33,7 +34,7 @@
 
 -(void)modifiedCellWithMessageData:(uexCV_TableViewCellData *)data{
     [super modifiedCellWithMessageData:data];
-    
+
        
     //horn
     NSMutableArray *imagePaths=[NSMutableArray array];
@@ -65,28 +66,29 @@
     [self.horn addSubview:self.staticHornView];
 
     UITapGestureRecognizer *tgr=[[UITapGestureRecognizer alloc] init];
+    self.tgr=tgr;
     [[tgr.rac_gestureSignal takeUntil:self.rac_prepareForReuseSignal] subscribeNext:^(id x) {
         self.data.isPlaying=!self.data.isPlaying;
+        if(self.data.isPlaying){
+            BOOL tryToPlay= self.data.onClickAction();
+            if(tryToPlay){
+                [self startPlayingWork];
+                
+            }else{
+                self.data.isPlaying=NO;
+            }
+        }
     }];
     [self.horn addGestureRecognizer:tgr];
     @weakify(self);
     [[RACObserve(self.data, isPlaying) distinctUntilChanged]
      subscribeNext:^(id x) {
-        //@strongify(self.data);
+        @strongify(self);
         BOOL isPlaying = [x boolValue];
-        if(isPlaying){
-            if(self.data.onClickAction){
-                BOOL tryToPlay= self.data.onClickAction();
-                if(tryToPlay){
-                    [self startPlayingWorkWithTimestamp:self.data.timestamp];
-
-                }else{
-                    self.data.isPlaying=NO;
-                }
-            }
-        }else{
+        if(!isPlaying){
             [self stopPlayingWork];
         }
+
     }];
     
     
@@ -142,13 +144,11 @@
     //[self layoutIfNeeded];
 }
 
--(void)notifyStartPlaying{
-    
-}
 
--(void)startPlayingWorkWithTimestamp:(long long)ts{
+
+-(void)startPlayingWork{
     for (uexCV_TableViewCellData *aCellData in self.tableView.superViewController.cellData) {
-        if(aCellData.timestamp != ts){
+        if(aCellData.timestamp != self.data.timestamp && aCellData.isPlaying){
             aCellData.isPlaying = NO;
         }
     }
@@ -162,7 +162,8 @@
 
 
 -(void)stopPlayingWork{
-    [self.tableView.superViewController stopPlaying];
+
+
     self.animateHornView.hidden=YES;
     self.staticHornView.hidden=NO;
 }

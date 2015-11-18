@@ -9,6 +9,7 @@
         <method name="changeStatusByTimestamp"></method>
         <method name="deleteMessageByTimestamp"></method>
         <method name="stopPlaying"></method>
+        <method name="endRefreshing"></method>
             
     </plugin>
         

@@ -27,7 +27,6 @@
 		4269011E1BFB3F5C00C877FE /* ReactiveCocoa.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 42F927C51BF9DDEB0073B601 /* ReactiveCocoa.framework */; };
 		4269011F1BFB3F5F00C877FE /* Masonry.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 42F927C31BF9DDE50073B601 /* Masonry.framework */; };
 		426901201BFB3F6200C877FE /* FDTemplateLayoutCell.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 426901171BFB384900C877FE /* FDTemplateLayoutCell.framework */; };
-		426901221BFB3F8400C877FE /* MJRefresh.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 426901211BFB3F7E00C877FE /* MJRefresh.bundle */; };
 		4289E0EB1BAD147600ED552F /* uexCV_Bubble.m in Sources */ = {isa = PBXBuildFile; fileRef = 4289E0EA1BAD147600ED552F /* uexCV_Bubble.m */; };
 		4289E0EE1BAD274600ED552F /* UIColor+uexCV.m in Sources */ = {isa = PBXBuildFile; fileRef = 4289E0ED1BAD274600ED552F /* UIColor+uexCV.m */; };
 		4289E0F61BAD31BF00ED552F /* voice1.png in Resources */ = {isa = PBXBuildFile; fileRef = 4289E0F21BAD31BF00ED552F /* voice1.png */; };
@@ -63,7 +62,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
-				426901221BFB3F8400C877FE /* MJRefresh.bundle in CopyFiles */,
 				426901201BFB3F6200C877FE /* FDTemplateLayoutCell.framework in CopyFiles */,
 				4269011F1BFB3F5F00C877FE /* Masonry.framework in CopyFiles */,
 				4269011E1BFB3F5C00C877FE /* ReactiveCocoa.framework in CopyFiles */,
@@ -114,7 +112,6 @@
 		421D76141BA80A4000659BF8 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		421D76161BA80A4600659BF8 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		426901171BFB384900C877FE /* FDTemplateLayoutCell.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FDTemplateLayoutCell.framework; sourceTree = "<group>"; };
-		426901211BFB3F7E00C877FE /* MJRefresh.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MJRefresh.bundle; sourceTree = "<group>"; };
 		4289E0E91BAD147600ED552F /* uexCV_Bubble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uexCV_Bubble.h; sourceTree = "<group>"; };
 		4289E0EA1BAD147600ED552F /* uexCV_Bubble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = uexCV_Bubble.m; sourceTree = "<group>"; };
 		4289E0EC1BAD274600ED552F /* UIColor+uexCV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+uexCV.h"; sourceTree = "<group>"; };
@@ -219,7 +216,6 @@
 		4201D71F1BA69299007D6036 /* sourceCode */ = {
 			isa = PBXGroup;
 			children = (
-				426901211BFB3F7E00C877FE /* MJRefresh.bundle */,
 				42F927CB1BF9DEFE0073B601 /* MJRefresh.framework */,
 				42F927C71BF9DDF10073B601 /* WebP.framework */,
 				42F927C81BF9DDF10073B601 /* YYImage.framework */,

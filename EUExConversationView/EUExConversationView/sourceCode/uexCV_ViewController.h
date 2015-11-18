@@ -19,18 +19,18 @@
 
 
 
-typedef void (^pullRefreshBlock)();
+
 
 @interface uexCV_ViewController : UIViewController
 @property(nonatomic,weak) EUExConversationView *euexObj;
 @property(nonatomic,assign)CGRect frame;
-@property(nonatomic,strong)pullRefreshBlock loadHistoryBlock;
+
 @property(nonatomic,strong)uexCV_UserInfo * meInfo;
 @property(nonatomic,strong)uexCV_UserInfo * youInfo;
 @property(nonatomic,strong)NSDictionary * extras;
 @property(nonatomic,strong)uexCV_TableView * tableView;
 @property(nonatomic,strong)AVAudioPlayer * player;
-@property(nonatomic,strong)NSIndexPath * currentPlayingIndex;
+
 @property(nonatomic,strong) NSMutableArray<uexCV_TableViewCellData *> * cellData;
 
 
@@ -51,4 +51,5 @@ typedef void (^pullRefreshBlock)();
 
 
 -(void)stopPlaying;
+-(void)endRefreshing;
 @end

@@ -70,13 +70,13 @@
     }
     NSInteger status=[_dataDict[@"status"] integerValue];
     switch (status) {
-        case 1:
+        case 0:
             self.status=uexCV_MessageStatusSending;
             break;
-        case 2:
+        case 1:
             self.status=uexCV_MessageStatusSent;
             break;
-        case 3:
+        case 2:
             self.status=uexCV_MessageStatusSendFailed;
             break;
             

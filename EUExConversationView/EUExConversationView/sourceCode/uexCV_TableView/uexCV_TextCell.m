@@ -43,7 +43,7 @@
                                           attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:self.data.info.fontSize]}
                                              context:nil].size;
     
-    NSLog(@"y%f",labelsize.height);
+    //NSLog(@"y%f",labelsize.height);
     [self.messageView addSubview:self.msgText];
     if(!uexCV_from_you){
         _msgText.transform=CGAffineTransformMakeScale(-1, 1);

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <uexplugins>
     <plugin
-        uexName="uexConversationView" version="3.0.3" build="3">
-        <info>3:删去info.plist</info>
+        uexName="uexConversationView" version="3.0.4" build="4">
+        <info>4:消息现在会自动排序;添加下拉加载相关接口</info>
+        <build>3:删去info.plist</build>
         <build>2:录音播放功能优化</build>
         <build>1:添加删除接口</build>
         <build>0:聊天视图插件</build>

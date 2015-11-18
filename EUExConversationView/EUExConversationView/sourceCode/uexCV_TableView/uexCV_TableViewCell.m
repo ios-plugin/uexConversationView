@@ -61,9 +61,12 @@
     self.containerView =[[UIView alloc]init];
     self.containerView.userInteractionEnabled=YES;
     [self.contentView addSubview:self.containerView];
-    self.containerView.translatesAutoresizingMaskIntoConstraints=NO;
-    baseView.translatesAutoresizingMaskIntoConstraints=NO;
+    //self.containerView.translatesAutoresizingMaskIntoConstraints=NO;
+    //self.frame=CGRectZero;
+    //self.frame=CGRectNull;
     //self.translatesAutoresizingMaskIntoConstraints=NO;
+    //baseView.translatesAutoresizingMaskIntoConstraints=NO;
+
     @weakify(self);
     
     [self.containerView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -72,7 +75,7 @@
     }];
     [baseView mas_updateConstraints:^(MASConstraintMaker *make) {
         @strongify(self);
-        make.edges.equalTo(self);
+        make.edges.equalTo(self).priorityHigh();
     }];
     
     
